@@ -24,10 +24,9 @@ See [all requirements in Issues](../../issues/). Close issues as you implement t
 
 | Requirement | Issue | Status |
 |---|---|---|
-| API Integration — the app consumes your WT1 API | [#...](../../issues/) | :white_large_square: |
-| OAuth Authentication — users log in via OAuth 2.0 | [#...](../../issues/) | :white_large_square: |
+| API Integration — the app consumes your WT1 API | [#14](../../issues/14) | :white_large_square: |
+| OAuth Authentication — users log in via OAuth 2.0 | [#15](../../issues/15) | :white_large_square: |
 | Interactive data visualization with aggregation/adaptation for 10 000+ data points | [#11](../../issues/11) | :white_large_square: |
-| User interaction controls (filters, search, sorting, etc.) | [#...](../../issues/) | :white_large_square: |
 | Efficient loading — pagination, lazy loading, loading indicators | [#13](../../issues/13) | :white_large_square: |
 
 ### Non-Functional Requirements
@@ -46,7 +45,7 @@ See [all requirements in Issues](../../issues/). Close issues as you implement t
 
 ### VG — AI/ML Feature (optional)
 
-For a VG grade, integrate **one** AI/ML feature into the application. Pick one below or propose your own of similar scope. See the [VG issue](../../issues/) for full details and acceptance criteria.
+For a VG grade, integrate **one** AI/ML feature into the application. Pick one below or propose your own of similar scope. See the [VG issue](../../issues/12) for full details and acceptance criteria.
 
 | Option | Status |
 |---|---|
