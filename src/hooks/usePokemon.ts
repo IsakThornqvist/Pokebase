@@ -8,8 +8,8 @@ interface PokemonResponse {
 }
 
 const POKEMON_QUERY = `
-  query {
-    allPokemon(limit: 5) {
+  query ($limit: Int, $offset: Int) {
+    allPokemon(limit: $limit, offset: $offset) {
       id
       name
       type1
@@ -23,7 +23,9 @@ const POKEMON_QUERY = `
   }
 `
 
-export function usePokemon() {
+const LIMIT = 20
+
+export function usePokemon(page: number) {
     // When data is fetched 3 things can happen
     const [pokemon, setPokemon] = useState<Pokemon[]>([])
     const [loading, setLoading] = useState(true)
@@ -32,7 +34,10 @@ export function usePokemon() {
     useEffect(() => {
         async function fetchPokemon() {
             try {
-                const data = await graphqlRequest<PokemonResponse>(POKEMON_QUERY)
+                const data = await graphqlRequest<PokemonResponse>(POKEMON_QUERY, {
+                    limit: LIMIT,
+                    offset: (page - 1) * LIMIT 
+                })
                 setPokemon(data.allPokemon)
             } catch (error) {
                 setError("Error while getting pokemon data")
@@ -41,6 +46,6 @@ export function usePokemon() {
             }
         }
         fetchPokemon()
-    }, [])
+    }, [page])
     return { pokemon, loading, error }
 }
