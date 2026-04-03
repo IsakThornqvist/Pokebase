@@ -38,7 +38,11 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
 
   return (
     <div className="bg-white rounded-2xl p-4 flex flex-col gap-3 border border-gray-100 shadow-sm">
-
+<img 
+  src={`https://img.pokemondb.net/sprites/go/normal/${pokemon.name.toLowerCase()}.png`}
+  alt={pokemon.name}
+  className="w-24 h-24 object-contain"
+/>
       <div>
         <h2 className="text-base font-medium">{pokemon.name}</h2>
         <div className="flex gap-1.5 mt-1">
