@@ -16,6 +16,7 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
         <p>Attack: {pokemon.attack}</p>
         <p>Defense: {pokemon.defense}</p>
         <p>Speed: {pokemon.speed}</p>
+        <p>Weight: {pokemon.weight}</p>
       </div>
     </div>
   )
