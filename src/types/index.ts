@@ -3,10 +3,10 @@ export interface Pokemon {
   name: string
   type1: string
   type2: string | null
-/*   species: string | null
-  height: string | null
-  weight: string | null
-  abilities: string | null */
+/*     species: string | null
+  height: string | null */
+  weight: string | null 
+  //abilities: string | null
   hp: number | null
   attack: number | null
   defense: number | null
