@@ -7,6 +7,10 @@ interface PokemonResponse {
     allPokemon: Pokemon[]
 }
 
+interface searchPokemonResponse {
+    searchPokemon: Pokemon[]
+}
+
 const POKEMON_QUERY = `
   query ($limit: Int, $offset: Int) {
     allPokemon(limit: $limit, offset: $offset) {
@@ -22,6 +26,28 @@ const POKEMON_QUERY = `
     }
   }
 `
+
+const SEARCH_QUERY = `
+    query ($name: String!) {
+      searchPokemon(name: $name) {
+    id
+    name
+    type1
+    hp
+  }
+
+    }
+`
+
+/* const TYPE_QUERY = `
+    query ($type: String) {
+        pokemonByType(type1: $type) {
+            id
+            name
+            }
+            }
+
+` */
 
 const LIMIT = 20
 
@@ -49,3 +75,37 @@ export function usePokemon(page: number) {
     }, [page])
     return { pokemon, loading, error }
 }
+
+
+export function useSearchPokemon(name: string) {
+    const [pokemon, setPokemon] = useState<Pokemon[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
+
+    useEffect(() => {
+        if (!name) {
+            setPokemon([])
+            setLoading(false)
+            return
+        }
+        async function fetchPokemonViaSearch() {
+            try {
+                const data = await graphqlRequest<searchPokemonResponse>
+                (SEARCH_QUERY, {
+                    name
+                })
+                setPokemon(data.searchPokemon)
+            } catch(error) {
+                setError("Error while getting pokemon data via search")
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchPokemonViaSearch()
+    }, [ name ])
+
+    return { pokemon, loading, error}
+}
+
+
+
