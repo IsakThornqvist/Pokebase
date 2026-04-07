@@ -23,4 +23,4 @@ export const typeColors: Record<string, string> = {
   Normal: "bg-stone-100 text-stone-600",
   Flying: "bg-sky-100 text-sky-700",
   Fairy: "bg-pink-300 text-pink-700",
-};
+}

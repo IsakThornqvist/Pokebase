@@ -1,7 +1,7 @@
 import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Pokemon from "./pages/Pokemon"
+import Pokemon from "./pages/PokemonPage"
 
 function App() {
   return (
