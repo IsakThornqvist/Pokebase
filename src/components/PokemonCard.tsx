@@ -1,29 +1,11 @@
 import type { Pokemon } from "../types";
+import { typeColors } from "../types/types";
 
 interface PokemonCardProps {
   pokemon: Pokemon;
 }
 
-const typeColors: Record<string, string> = {
-  Fire: "bg-orange-100 text-orange-700",
-  Water: "bg-blue-100 text-blue-700",
-  Grass: "bg-green-100 text-green-700",
-  Electric: "bg-yellow-100 text-yellow-700",
-  Poison: "bg-purple-100 text-purple-700",
-  Psychic: "bg-pink-100 text-pink-700",
-  Ice: "bg-cyan-100 text-cyan-700",
-  Dragon: "bg-indigo-100 text-indigo-700",
-  Dark: "bg-gray-900 text-white",
-  Rock: "bg-yellow-200 text-yellow-800",
-  Ground: "bg-orange-200 text-orange-800",
-  Ghost: "bg-violet-100 text-violet-700",
-  Bug: "bg-lime-100 text-lime-700",
-  Steel: "bg-slate-100 text-slate-700",
-  Fighting: "bg-red-100 text-red-700",
-  Normal: "bg-stone-100 text-stone-600",
-  Flying: "bg-sky-100 text-sky-700",
-  Fairy: "bg-pink-300 text-pink-700",
-};
+
 
 const statColors: Record<string, string> = {
   HP: "bg-green-400",
@@ -33,6 +15,7 @@ const statColors: Record<string, string> = {
 };
 
 const PokemonCard = ({ pokemon }: PokemonCardProps) => {
+
   const getTypeColor = (type: string) =>
     typeColors[type] ?? "bg-gray-100 text-gray-600";
 
@@ -48,8 +31,8 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
         <div className="flex gap-1.5 mt-1">
           {[pokemon.type1, pokemon.type2].filter(Boolean).map((type) => (
             <span
-              key={type}
-              className={`text-xs font-medium px-2 py-0.5 rounded-full ${getTypeColor(type!)}`}
+            key={type}
+            className={`text-xs font-medium px-2 py-0.5 rounded-full ${getTypeColor(type!)}`}
             >
               {type}
             </span>
@@ -79,7 +62,7 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default PokemonCard;
