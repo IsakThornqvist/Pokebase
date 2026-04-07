@@ -3,14 +3,16 @@ import PokemonCard from "../components/PokemonCard"
 import { useState } from "react"
 import { types } from "../types/types"
 import { typeColors } from "../types/types"
+import { useDelay } from "../hooks/useDelay"
 
 const PokemonPage = () => {
   const [page, setPage] = useState(1);
   const { pokemon, loading, error } = usePokemon(page)
 
   const [search, setSearch] = useState("");
+  const delaySearch = useDelay(search, 500)
   const { pokemon: searchedPokemon, loading: searchLoading, error: searchError } =
-    useSearchPokemon(search)
+    useSearchPokemon(delaySearch)
 
   const displayPokemon = search ? searchedPokemon : pokemon
   const isLoading = search ? searchLoading : loading
