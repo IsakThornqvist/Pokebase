@@ -22,7 +22,7 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
   return (
     <div className="bg-white rounded-2xl p-4 flex flex-col gap-3 border border-gray-100 shadow-sm">
 <img 
-  src={`https://img.pokemondb.net/sprites/go/normal/${pokemon.name.toLowerCase()}.png`}
+  src={`https://img.pokemondb.net/sprites/home/normal/${pokemon.name.toLowerCase()}.png`}
   alt={pokemon.name}
   className="w-24 h-24 object-contain"
 />

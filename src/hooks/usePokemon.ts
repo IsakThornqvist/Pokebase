@@ -11,6 +11,10 @@ interface searchPokemonResponse {
     searchPokemon: Pokemon[]
 }
 
+interface typeSearchPokemonResponse {
+    typeSearchPokemon: Pokemon[]
+}
+
 const POKEMON_QUERY = `
   query ($limit: Int, $offset: Int) {
     allPokemon(limit: $limit, offset: $offset) {
@@ -39,7 +43,7 @@ const SEARCH_QUERY = `
     }
 `
 
-/* const TYPE_QUERY = `
+/*  const TYPE_QUERY = `
     query ($type: String) {
         pokemonByType(type1: $type) {
             id
@@ -47,7 +51,7 @@ const SEARCH_QUERY = `
             }
             }
 
-` */
+`  */
 
 const LIMIT = 20
 
@@ -107,5 +111,8 @@ export function useSearchPokemon(name: string) {
     return { pokemon, loading, error}
 }
 
+/* export function useTypeSearchPokemon(type1: string) {
+
+} */
 
 
