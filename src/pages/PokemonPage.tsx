@@ -1,3 +1,20 @@
+/**
+ * PokemonPage component.
+ *
+ * Main page for displaying Pokémon data.
+ * Supports:
+ * - Pagination
+ * - Search (debounced/delayed)
+ * - Type filtering
+ * - Shiny toggle
+ *
+ * Combines multiple data sources and decides what to render
+ * based on current UI state.
+ *
+ * @author Isak Thörnqvist
+ * @version 1.0.0
+ */
+
 import { usePokemon, useSearchPokemon, useTypeSearchPokemon } from "../hooks/usePokemon"
 import PokemonCard from "../components/PokemonCard"
 import { useState } from "react"
@@ -5,27 +22,47 @@ import { types, typeColors } from "../types/types"
 import { useDelay } from "../hooks/useDelay"
 
 const PokemonPage = () => {
+  /** Pagination state */
   const [page, setPage] = useState(1)
   const { pokemon, loading, error } = usePokemon(page)
 
+  /** Search state (debounced to avoid excessive API calls) */
   const [search, setSearch] = useState("")
   const delaySearch = useDelay(search, 500)
   const { pokemon: searchedPokemon, loading: searchLoading, error: searchError } = useSearchPokemon(delaySearch)
 
+  /** Type filter state */
   const [selectedType, setSelectedType] = useState("")
   const { pokemon: typeResults } = useTypeSearchPokemon(selectedType)
 
+  /** Toggle shiny sprites */
   const [isShiny, setIsShiny] = useState(false)
 
+  /**
+   * Determines which dataset to display.
+   *
+   * Priority:
+   * 1. Search results
+   * 2. Type filter results
+   * 3. Default paginated list
+   */
   const displayPokemon = search ? searchedPokemon : selectedType ? typeResults : pokemon
+
+  /**
+   * Determines loading state based on active mode.
+   */
   const isLoading = search ? searchLoading : loading
 
+  /**
+   * Dynamic page title depending on active filter/search.
+   */
   const pageTitle = selectedType
     ? `${selectedType} Pokémon`
     : search
     ? `Results for "${search}"`
     : 'All Pokémon'
 
+  /** Loading state UI */
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -34,6 +71,7 @@ const PokemonPage = () => {
     )
   }
 
+  /** Error state UI */
   if (error || searchError) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -88,6 +126,7 @@ const PokemonPage = () => {
         </div>
       </div>
 
+    {/* Shiny toggle */}
     <button
       onClick={() => setIsShiny(!isShiny)}
       className={`text-xs font-semibold px-3 py-1 rounded-full transition-all duration-150 ${
@@ -115,14 +154,14 @@ const PokemonPage = () => {
         </div>
       )}
 
-      {/* Grid */}
+      {/* Pokemon Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
         {displayPokemon.map((pokemon) => (
           <PokemonCard key={pokemon.id} pokemon={pokemon} isShiny={isShiny} />
         ))}
       </div>
 
-      {/* Pagination */}
+      {/* Pagination (only when no filters/search are active) */}
       {!search && !selectedType && (
         <div className="flex items-center justify-center gap-3 pt-4 pb-2">
           <button
