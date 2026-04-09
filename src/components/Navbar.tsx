@@ -1,8 +1,24 @@
+/**
+ * Navbar component.
+ *
+ * Provides top-level navigation for the application.
+ * Highlights the active route based on current location.
+ *
+ * @author Isak Thörnqvist
+ * @version 1.0.0
+ */
 import { Link, useLocation } from 'react-router-dom'
 
+/**
+ * Renders the main navigation bar.
+ */
 const Navbar = () => {
+  /** Current route location (used to highlight active link) */
   const location = useLocation()
 
+  /**
+   * Navigation links configuration.
+   */
   const links = [
     { to: '/', label: 'Home' },
     { to: '/pokemon', label: 'Pokémon' },
