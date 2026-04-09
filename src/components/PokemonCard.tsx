@@ -3,6 +3,7 @@ import { typeColors } from "../types/types"
 
 interface PokemonCardProps {
   pokemon: Pokemon
+  isShiny?: boolean
 }
 
 const statColors: Record<string, string> = {
@@ -12,7 +13,7 @@ const statColors: Record<string, string> = {
   SPD: "bg-violet-400",
 }
 
-const PokemonCard = ({ pokemon }: PokemonCardProps) => {
+const PokemonCard = ({ pokemon, isShiny = false }: PokemonCardProps) => {
   const getTypeColor = (type: string) => typeColors[type] ?? "bg-gray-100 text-gray-500"
 
   return (
@@ -21,7 +22,7 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
       {/* Image area */}
       <div className="flex justify-center items-center bg-gradient-to-b from-gray-50 to-gray-100 pt-5 pb-2 px-4">
         <img
-          src={`https://img.pokemondb.net/sprites/home/normal/${pokemon.name.toLowerCase()}.png`}
+          src={`https://img.pokemondb.net/sprites/home/${isShiny ? 'shiny' : 'normal'}/${pokemon.name.toLowerCase()}.png`}
           alt={pokemon.name}
           className="w-24 h-24 object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-200"
         />

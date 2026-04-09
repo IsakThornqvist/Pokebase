@@ -15,6 +15,8 @@ const PokemonPage = () => {
   const [selectedType, setSelectedType] = useState("")
   const { pokemon: typeResults } = useTypeSearchPokemon(selectedType)
 
+  const [isShiny, setIsShiny] = useState(false)
+
   const displayPokemon = search ? searchedPokemon : selectedType ? typeResults : pokemon
   const isLoading = search ? searchLoading : loading
 
@@ -86,6 +88,17 @@ const PokemonPage = () => {
         </div>
       </div>
 
+    <button
+      onClick={() => setIsShiny(!isShiny)}
+      className={`text-xs font-semibold px-3 py-1 rounded-full transition-all duration-150 ${
+        isShiny
+          ? 'bg-yellow-400 text-yellow-900'
+          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+      }`}
+    >
+      {isShiny ? '✨ Shiny' : 'Normal'}
+    </button>
+
       {/* Results header */}
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold text-gray-700">{pageTitle}</h2>
@@ -105,7 +118,7 @@ const PokemonPage = () => {
       {/* Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
         {displayPokemon.map((pokemon) => (
-          <PokemonCard key={pokemon.id} pokemon={pokemon} />
+          <PokemonCard key={pokemon.id} pokemon={pokemon} isShiny={isShiny} />
         ))}
       </div>
 
