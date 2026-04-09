@@ -5,61 +5,73 @@ interface PokemonCardProps {
   pokemon: Pokemon
 }
 
-
-
 const statColors: Record<string, string> = {
-  HP: "bg-green-400",
+  HP:  "bg-emerald-400",
   ATK: "bg-orange-400",
   DEF: "bg-blue-400",
-  SPD: "bg-purple-400",
+  SPD: "bg-violet-400",
 }
 
 const PokemonCard = ({ pokemon }: PokemonCardProps) => {
-
-  const getTypeColor = (type: string) =>
-    typeColors[type] ?? "bg-gray-100 text-gray-600";
+  const getTypeColor = (type: string) => typeColors[type] ?? "bg-gray-100 text-gray-500"
 
   return (
-    <div className="bg-white rounded-2xl p-4 flex flex-col gap-3 border border-gray-100 shadow-sm">
-<img 
-  src={`https://img.pokemondb.net/sprites/home/normal/${pokemon.name.toLowerCase()}.png`}
-  alt={pokemon.name}
-  className="w-24 h-24 object-contain"
-/>
-      <div>
-        <h2 className="text-base font-medium">{pokemon.name}</h2>
-        <div className="flex gap-1.5 mt-1">
-          {[pokemon.type1, pokemon.type2].filter(Boolean).map((type) => (
-            <span
-            key={type}
-            className={`text-xs font-medium px-2 py-0.5 rounded-full ${getTypeColor(type!)}`}
-            >
-              {type}
-            </span>
-          ))}
-        </div>
+    <div className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer overflow-hidden flex flex-col">
+
+      {/* Image area */}
+      <div className="flex justify-center items-center bg-gradient-to-b from-gray-50 to-gray-100 pt-5 pb-2 px-4">
+        <img
+          src={`https://img.pokemondb.net/sprites/home/normal/${pokemon.name.toLowerCase()}.png`}
+          alt={pokemon.name}
+          className="w-24 h-24 object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-200"
+        />
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        {[
-          { label: "HP", value: pokemon.hp },
-          { label: "ATK", value: pokemon.attack },
-          { label: "DEF", value: pokemon.defense },
-          { label: "SPD", value: pokemon.speed },
-        ].map(({ label, value }) => (
-          <div key={label} className="flex items-center gap-2">
-            <span className="text-xs text-gray-400 w-8">{label}</span>
-            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-              <div
-                className={`h-full rounded-full ${statColors[label]}`}
-                style={{ width: `${((value ?? 0) / 150) * 100}%` }}
-              />
-            </div>
-            <span className="text-xs text-gray-500 w-5 text-right">
-              {value}
-            </span>
+      {/* Info + stats */}
+      <div className="flex flex-col gap-3 p-4 flex-1">
+
+        {/* Name + types */}
+        <div>
+          <p className="text-xs font-medium text-gray-400 uppercase tracking-widest mb-0.5">
+            #{String(pokemon.id).padStart(3, '0')}
+          </p>
+          <h2 className="text-sm font-semibold text-gray-900 capitalize">{pokemon.name}</h2>
+          <div className="flex gap-1.5 mt-2">
+            {[pokemon.type1, pokemon.type2].filter(Boolean).map((type) => (
+              <span
+                key={type}
+                className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${getTypeColor(type!)}`}
+              >
+                {type}
+              </span>
+            ))}
           </div>
-        ))}
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-gray-100" />
+
+        {/* Stats */}
+        <div className="flex flex-col gap-2">
+          {[
+            { label: "HP",  value: pokemon.hp },
+            { label: "ATK", value: pokemon.attack },
+            { label: "DEF", value: pokemon.defense },
+            { label: "SPD", value: pokemon.speed },
+          ].map(({ label, value }) => (
+            <div key={label} className="flex items-center gap-2">
+              <span className="text-xs font-medium text-gray-400 w-7 shrink-0">{label}</span>
+              <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div
+                  className={`h-full rounded-full ${statColors[label]} transition-all duration-500`}
+                  style={{ width: `${Math.min(((value ?? 0) / 150) * 100, 100)}%` }}
+                />
+              </div>
+              <span className="text-xs tabular-nums text-gray-500 w-6 text-right shrink-0">{value}</span>
+            </div>
+          ))}
+        </div>
+
       </div>
     </div>
   )
