@@ -1,7 +1,21 @@
+/**
+ * App component.
+ *
+ * Root component of the application.
+ * Sets up routing and global layout structure.
+ *
+ *
+ * @author Isak Thörnqvist
+ * @version 1.0.0
+ */
+
 import Navbar from "./components/Navbar"
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Pokemon from "./pages/PokemonPage"
 
+/**
+ * Renders the main application layout and routes.
+ */
 function App() {
   return (
     <BrowserRouter>
