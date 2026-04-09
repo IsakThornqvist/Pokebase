@@ -1,11 +1,27 @@
+/**
+ * The Pokemon card component
+ *
+ *
+ * @author Isak Thörnqvist
+ * @version 1.0.0
+ */
 import type { Pokemon } from "../types"
 import { typeColors } from "../types/types"
 
+/**
+ * Props for PokemonCard.
+ *
+ * @property pokemon - The Pokémon data to display
+ * @property isShiny - Whether to show shiny sprite (optional)
+ */
 interface PokemonCardProps {
   pokemon: Pokemon
   isShiny?: boolean
 }
 
+/**
+ * Maps stat labels to Tailwind color classes.
+ */
 const statColors: Record<string, string> = {
   HP:  "bg-emerald-400",
   ATK: "bg-orange-400",
@@ -13,8 +29,12 @@ const statColors: Record<string, string> = {
   SPD: "bg-violet-400",
 }
 
+/**
+ * Renders a card UI for a single Pokémon.
+ */
 const PokemonCard = ({ pokemon, isShiny = false }: PokemonCardProps) => {
-  const getTypeColor = (type: string) => typeColors[type] ?? "bg-gray-100 text-gray-500"
+
+const getTypeColor = (type: string) => typeColors[type] ?? "bg-gray-100 text-gray-500"
 
   return (
     <div className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer overflow-hidden flex flex-col">

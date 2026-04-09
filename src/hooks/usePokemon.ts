@@ -1,20 +1,40 @@
+/**
+ * The Pokemon hook.
+ *
+ * Handles fetching Pokémon data from the GraphQL API,
+ * including pagination, search, and type filtering.
+ *
+ * @author Isak Thörnqvist
+ * @version 1.0.0
+ */
 import { graphqlRequest } from "../utils/graphql"
 import type { Pokemon } from "../types"
 import { useState, useEffect } from "react"
 
-// PokemonResponse = object that has a key allPokemon which is an array of pokemon
+/**
+ * Response type for fetching all Pokémon.
+ */
 interface PokemonResponse {
     allPokemon: Pokemon[]
 }
 
+/**
+ * Response type for searching Pokémon.
+ */
 interface searchPokemonResponse {
     searchPokemon: Pokemon[]
 }
 
+/**
+ * Response type for filtering Pokémon by type.
+ */
 interface typeSearchPokemonResponse {
     pokemonByType: Pokemon[]
 }
 
+/**
+ * GraphQL query for fetching Pokémon with pagination.
+ */
 const POKEMON_QUERY = `
   query ($limit: Int, $offset: Int) {
     allPokemon(limit: $limit, offset: $offset) {
@@ -31,6 +51,9 @@ const POKEMON_QUERY = `
   }
 `
 
+/**
+ * GraphQL query for searching Pokémon by name.
+ */
 const SEARCH_QUERY = `
     query ($name: String!) {
       searchPokemon(name: $name) {
@@ -43,6 +66,9 @@ const SEARCH_QUERY = `
     }
 `
 
+/**
+ * GraphQL query for filtering Pokémon by type.
+ */
 const TYPE_QUERY = `
   query ($type1: String!) {
     pokemonByType(type1: $type1) {
@@ -58,8 +84,17 @@ const TYPE_QUERY = `
   }
 `
 
+/**
+ * Number of Pokémon per page.
+ */
 const LIMIT = 20
 
+/**
+ * Fetches a paginated list of Pokémon.
+ *
+ * @param {number} page - Current page number.
+ * @returns {{ pokemon: Pokemon[], loading: boolean, error: string | null }}
+ */
 export function usePokemon(page: number) {
     // When data is fetched 3 things can happen
     const [pokemon, setPokemon] = useState<Pokemon[]>([])
@@ -86,6 +121,14 @@ export function usePokemon(page: number) {
 }
 
 
+/**
+ * Searches Pokémon by name.
+ *
+ * Skips request if no name is provided.
+ *
+ * @param {string} name - Pokémon name.
+ * @returns {{ pokemon: Pokemon[], loading: boolean, error: string | null }}
+ */
 export function useSearchPokemon(name: string) {
     const [pokemon, setPokemon] = useState<Pokemon[]>([])
     const [loading, setLoading] = useState(true)
@@ -129,6 +172,16 @@ export function useSearchPokemon(name: string) {
             setLoading(false)
             return
         }
+
+        /**
+/**
+ * Fetches Pokémon by type.
+ *
+ * Skips request if no type is provided.
+ *
+ * @param {string} type1 - Pokémon primary type.
+ * @returns {{ pokemon: Pokemon[], loading: boolean, error: string | null }}
+ */
         async function fetchPokemonViaType () {
             try {
                 const data = await graphqlRequest<typeSearchPokemonResponse>(TYPE_QUERY, {
