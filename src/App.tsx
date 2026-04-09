@@ -1,5 +1,5 @@
 import Navbar from "./components/Navbar"
-import Footer from "./components/Footer"
+// import Footer from "./components/Footer"
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Pokemon from "./pages/PokemonPage"
 
@@ -11,9 +11,8 @@ function App() {
       <Routes>
       <Route path="/pokemon" element={<Pokemon />} />
       </Routes>
-      <h1 className="font-bold text-3xl text-center"> Header</h1>
     </main>
-    <Footer/>
+    {/* <Footer/> */}
     </BrowserRouter>
   )
 }

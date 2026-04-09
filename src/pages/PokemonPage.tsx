@@ -1,4 +1,4 @@
-import { usePokemon, useSearchPokemon } from "../hooks/usePokemon"
+import { usePokemon, useSearchPokemon, useTypeSearchPokemon } from "../hooks/usePokemon"
 import PokemonCard from "../components/PokemonCard"
 import { useState } from "react"
 import { types } from "../types/types"
@@ -9,12 +9,15 @@ const PokemonPage = () => {
   const [page, setPage] = useState(1);
   const { pokemon, loading, error } = usePokemon(page)
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState("")
   const delaySearch = useDelay(search, 500)
   const { pokemon: searchedPokemon, loading: searchLoading, error: searchError } =
     useSearchPokemon(delaySearch)
 
-  const displayPokemon = search ? searchedPokemon : pokemon
+  const [selectedType, setSelectedType] = useState("")
+  const { pokemon: typeResults } = useTypeSearchPokemon(selectedType)
+
+  const displayPokemon = search ? searchedPokemon : selectedType ? typeResults : pokemon
   const isLoading = search ? searchLoading : loading
 
   if (isLoading) {
@@ -35,15 +38,17 @@ const PokemonPage = () => {
         className="border rounded px-2 py-1 mb-4 w-full"
       />
 
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap gap-2 mb-6 ">
         {types.map((type) => (
           <button
             key={type}
+            onClick={() => setSelectedType(type)}
             className={`text-xs font-medium px-3 py-1 rounded-full ${typeColors[type]}`}
           >
             {type}
           </button>
         ))}
+        <button onClick={() => setSelectedType("")}>All</button>
       </div>
 
       <h1 className="text-3xl font-bold mb-6">Pokemon</h1>

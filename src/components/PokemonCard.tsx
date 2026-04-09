@@ -1,8 +1,8 @@
-import type { Pokemon } from "../types";
-import { typeColors } from "../types/types";
+import type { Pokemon } from "../types"
+import { typeColors } from "../types/types"
 
 interface PokemonCardProps {
-  pokemon: Pokemon;
+  pokemon: Pokemon
 }
 
 
@@ -12,7 +12,7 @@ const statColors: Record<string, string> = {
   ATK: "bg-orange-400",
   DEF: "bg-blue-400",
   SPD: "bg-purple-400",
-};
+}
 
 const PokemonCard = ({ pokemon }: PokemonCardProps) => {
 
@@ -65,4 +65,4 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
   )
 }
 
-export default PokemonCard;
+export default PokemonCard

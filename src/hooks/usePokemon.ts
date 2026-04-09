@@ -12,7 +12,7 @@ interface searchPokemonResponse {
 }
 
 interface typeSearchPokemonResponse {
-    typeSearchPokemon: Pokemon[]
+    pokemonByType: Pokemon[]
 }
 
 const POKEMON_QUERY = `
@@ -43,15 +43,20 @@ const SEARCH_QUERY = `
     }
 `
 
-/*  const TYPE_QUERY = `
-    query ($type: String) {
-        pokemonByType(type1: $type) {
-            id
-            name
-            }
-            }
-
-`  */
+const TYPE_QUERY = `
+  query ($type1: String!) {
+    pokemonByType(type1: $type1) {
+      id
+      name
+      type1
+      type2
+      hp
+      attack
+      defense
+      speed
+    }
+  }
+`
 
 const LIMIT = 20
 
@@ -111,8 +116,35 @@ export function useSearchPokemon(name: string) {
     return { pokemon, loading, error}
 }
 
-/* export function useTypeSearchPokemon(type1: string) {
+ export function useTypeSearchPokemon(type1: string) {
 
-} */
+    const [pokemon, setPokemon] = useState<Pokemon[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
+
+
+    useEffect(() => {
+        if (!type1) {
+            setPokemon([])
+            setLoading(false)
+            return
+        }
+        async function fetchPokemonViaType () {
+            try {
+                const data = await graphqlRequest<typeSearchPokemonResponse>(TYPE_QUERY, {
+                    type1
+                })
+                setPokemon(data.pokemonByType)
+            } catch(error) {
+                setError("Error while getting pokemon via type search")
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchPokemonViaType()
+    }, [type1])
+
+    return { pokemon, loading, error}
+} 
 
 
