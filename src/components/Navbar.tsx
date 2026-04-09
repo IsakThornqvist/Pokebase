@@ -1,19 +1,38 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const Navbar = () => {
+  const location = useLocation()
+
+  const links = [
+    { to: '/', label: 'Home' },
+    { to: '/pokemon', label: 'Pokémon' },
+    { to: '/teams', label: 'Teams' },
+  ]
+
   return (
-<nav className="bg-green-700 px-6 py-10 flex items-center justify-between min-h-16">
-      <ul className="flex gap-6">
-        <li>
-          <Link to="/" className="text-white hover:text-blue-400">Home</Link>
-        </li>
-        <li>
-          <Link to="/pokemon" className="text-white hover:text-blue-400">Pokemon</Link>
-        </li>
-        <li>
-          <Link to="/teams" className="text-white hover:text-blue-400">Teams</Link>
-        </li>
-      </ul>
+    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <div className="max-w-screen-xl mx-auto px-6 h-14 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="text-base font-bold text-gray-900 tracking-tight">Pokébuilder</span>
+          <span className="text-xs font-medium px-1.5 py-0.5 rounded bg-red-100 text-red-600 leading-none">β</span>
+        </div>
+        <ul className="flex gap-0.5">
+          {links.map(({ to, label }) => (
+            <li key={to}>
+              <Link
+                to={to}
+                className={`px-3.5 py-1.5 rounded-md text-sm font-medium transition-colors duration-150
+                  ${location.pathname === to
+                    ? 'bg-gray-100 text-gray-900'
+                    : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
+                  }`}
+              >
+                {label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </nav>
   )
 }
