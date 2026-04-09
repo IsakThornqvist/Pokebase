@@ -1,9 +1,15 @@
+/**
+ * List of Pokémon types.
+ */
 export const types = [
   "Normal", "Fire", "Water", "Grass", "Electric", "Ice",
   "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug",
   "Rock", "Ghost", "Dragon", "Dark", "Steel"
 ]
 
+/**
+ * Mapping of Pokémon types to Tailwind CSS classes for background and text color.
+ */
 export const typeColors: Record<string, string> = {
   Fire: "bg-orange-100 text-orange-700",
   Water: "bg-blue-100 text-blue-700",

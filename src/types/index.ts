@@ -1,3 +1,6 @@
+/**
+ * Represents a Pokémon.
+ */
 export interface Pokemon {
   id: string
   name: string
