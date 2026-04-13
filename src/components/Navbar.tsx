@@ -7,7 +7,9 @@
  * @author Isak Thörnqvist
  * @version 1.0.0
  */
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
+
 
 /**
  * Renders the main navigation bar.
@@ -15,7 +17,13 @@ import { Link, useLocation } from 'react-router-dom'
 const Navbar = () => {
   /** Current route location (used to highlight active link) */
   const location = useLocation()
+  const { token, logout } = useAuth()
+  const navigate = useNavigate()
 
+    const handleLogout = () => {
+    logout()
+    navigate("/login")
+  }
   /**
    * Navigation links configuration.
    */
@@ -47,6 +55,12 @@ const Navbar = () => {
               </Link>
             </li>
           ))}
+                    <li>
+            {token
+              ? <button onClick={handleLogout} className="px-3.5 py-1.5 rounded-md text-sm font-medium text-red-500 hover:bg-red-50 transition-colors duration-150">Logout</button>
+              : <Link to="/login" className="px-3.5 py-1.5 rounded-md text-sm font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-50 transition-colors duration-150">Login</Link>
+            }
+          </li>
         </ul>
       </div>
     </nav>
