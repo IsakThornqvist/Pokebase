@@ -13,6 +13,7 @@ import Navbar from "./components/Navbar"
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Pokemon from "./pages/PokemonPage"
 import LoginPage from "./pages/LoginPage"
+import RegisterPage from "./pages/RegisterPage"
 import { AuthProvider } from "./context/AuthContext"
 
 /**
@@ -29,6 +30,7 @@ function App() {
             <Route path="/pokemon" element={<Pokemon />} />
             
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
 
           </Routes>
         </div>
