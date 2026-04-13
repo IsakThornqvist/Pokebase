@@ -1,8 +1,8 @@
 /**
  * LoginPage component.
  *
- * Provides a login form and handles authentication flow.
- * On success, stores token and redirects to Pokémon page.
+ * Provides a Register form and handles registration flow
+ * On successful register, redirect to Pokémon page.
  *
  * @author Isak Thörnqvist
  * @version 1.0.0
@@ -14,7 +14,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 /**
- * Renders the login form.
+ * Renders the Register form.
 */
 const RegisterPage = () => {
     /** Form state */
