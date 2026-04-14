@@ -28,9 +28,9 @@ interface searchPokemonResponse {
 /**
  * Response type for filtering Pokémon by type.
  */
-interface typeSearchPokemonResponse {
+/* interface typeSearchPokemonResponse {
     pokemonByType: Pokemon[]
-}
+} */
 
 /**
  * GraphQL query for fetching Pokémon with pagination.
@@ -158,13 +158,10 @@ export function useSearchPokemon(name: string) {
 
     return { pokemon, loading, error}
 }
-
- export function useTypeSearchPokemon(type1: string) {
-
+export function useTypeSearchPokemon(type1: string) {
     const [pokemon, setPokemon] = useState<Pokemon[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
-
 
     useEffect(() => {
         if (!type1) {
@@ -173,31 +170,27 @@ export function useSearchPokemon(name: string) {
             return
         }
 
-        /**
-/**
- * Fetches Pokémon by type.
- *
- * Skips request if no type is provided.
- *
- * @param {string} type1 - Pokémon primary type.
- * @returns {{ pokemon: Pokemon[], loading: boolean, error: string | null }}
- */
-        async function fetchPokemonViaType () {
+        async function fetchPokemonViaType() {
             try {
-                const data = await graphqlRequest<typeSearchPokemonResponse>(TYPE_QUERY, {
-                    type1
+                const data = await graphqlRequest<PokemonResponse>(POKEMON_QUERY, {
+                    limit: 1000,
+                    offset: 0
                 })
-                setPokemon(data.pokemonByType)
-            } catch(error) {
+
+                const filtered = data.allPokemon.filter(p =>
+                    p.type1 === type1 || p.type2 === type1
+                )
+
+                setPokemon(filtered)
+            } catch (error) {
                 setError("Error while getting pokemon via type search")
             } finally {
                 setLoading(false)
             }
         }
+
         fetchPokemonViaType()
     }, [type1])
 
-    return { pokemon, loading, error}
-} 
-
-
+    return { pokemon, loading, error }
+}
