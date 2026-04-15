@@ -175,12 +175,13 @@ export function useTypeSearchPokemon(type1: string) {
         async function fetchPokemonViaType() {
             try {
                 const data = await graphqlRequest<PokemonResponse>(POKEMON_QUERY, {
-                    limit: 1000,
+                    limit: 10000,
                     offset: 0
                 })
 
                 const filtered = data.allPokemon.filter(p =>
-                    p.type1 === type1 || p.type2 === type1
+                    p.type1?.toLowerCase() === type1.toLowerCase() || 
+                    p.type2?.toLowerCase() === type1.toLowerCase()
                 )
 
                 setPokemon(filtered)
