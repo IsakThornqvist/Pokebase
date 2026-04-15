@@ -13,6 +13,8 @@ export interface Pokemon {
   hp: number | null
   attack: number | null
   defense: number | null
+  spAttack: number | null
+  spDefense: number | null
   speed: number | null
 /*   catchRate: number | null
   baseExp: number | null
