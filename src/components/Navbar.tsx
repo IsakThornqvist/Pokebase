@@ -31,6 +31,7 @@ const Navbar = () => {
     { to: '/', label: 'Home' },
     { to: '/pokemon', label: 'Pokémon' },
     { to: '/teams', label: 'Teams' },
+    { to: '/statistics', label: 'Statistics' },
   ]
 
   return (
