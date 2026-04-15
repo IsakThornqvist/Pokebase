@@ -29,6 +29,7 @@ const statColors: Record<string, string> = {
   SPATK: "bg-blue-400",
   SPDEF: "bg-violet-400",
   SPD: "bg-pink-400",
+  TOTAL: "bg-red-500",
 }
 
 /**
@@ -83,13 +84,17 @@ const getTypeColor = (type: string) => typeColors[type] ?? "bg-gray-100 text-gra
             { label: "SPATK", value: pokemon.spAttack },
             { label: "SPDEF", value: pokemon.spDefense },
             { label: "SPD", value: pokemon.speed },
+            { label: "TOTAL", value: pokemon.hp + pokemon.attack + pokemon.defense + pokemon.spAttack + pokemon.spDefense + pokemon.speed},
+
+
+            
           ].map(({ label, value }) => (
             <div key={label} className="flex items-center gap-2">
               <span className="text-xs font-medium text-gray-400 w-7 shrink-0">{label}</span>
               <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                 <div
                   className={`h-full rounded-full ${statColors[label]} transition-all duration-500`}
-                  style={{ width: `${Math.min(((value ?? 0) / 150) * 100, 100)}%` }}
+                  style={{ width: `${Math.min(((value ?? 0) / 160) * 100, 100)}%` }}
                 />
               </div>
               <span className="text-xs tabular-nums text-gray-500 w-6 text-right shrink-0">{value}</span>
