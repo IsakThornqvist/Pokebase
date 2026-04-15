@@ -24,9 +24,11 @@ interface PokemonCardProps {
  */
 const statColors: Record<string, string> = {
   HP:  "bg-emerald-400",
-  ATK: "bg-orange-400",
-  DEF: "bg-blue-400",
-  SPD: "bg-violet-400",
+  ATK: "bg-yellow-400",
+  DEF: "bg-orange-400",
+  SPATK: "bg-blue-400",
+  SPDEF: "bg-violet-400",
+  SPD: "bg-pink-400",
 }
 
 /**
@@ -78,6 +80,8 @@ const getTypeColor = (type: string) => typeColors[type] ?? "bg-gray-100 text-gra
             { label: "HP",  value: pokemon.hp },
             { label: "ATK", value: pokemon.attack },
             { label: "DEF", value: pokemon.defense },
+            { label: "SPATK", value: pokemon.spAttack },
+            { label: "SPDEF", value: pokemon.spDefense },
             { label: "SPD", value: pokemon.speed },
           ].map(({ label, value }) => (
             <div key={label} className="flex items-center gap-2">

@@ -45,6 +45,8 @@ const POKEMON_QUERY = `
       hp
       attack
       defense
+      spAttack
+      spDefense
       speed
       weight
     }
