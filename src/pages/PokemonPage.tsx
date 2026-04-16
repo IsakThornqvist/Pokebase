@@ -15,7 +15,7 @@
  * @version 1.0.0
  */
 
-import { usePokemon, useSearchPokemon, useTypeSearchPokemon } from "../hooks/usePokemon"
+import { usePokemon, useSearchPokemon, useTypeSearchPokemon, useAllPokemon } from "../hooks/usePokemon"
 import PokemonCard from "../components/PokemonCard"
 import { useState } from "react"
 import { types, typeColors } from "../types/types"
@@ -38,6 +38,7 @@ const PokemonPage = () => {
 
   /** Toggle shiny sprites */
   const [isShiny, setIsShiny] = useState(false)
+  const { pokemon: allPokemon } = useAllPokemon()
 
   /**
    * Determines which dataset to display.
@@ -47,7 +48,13 @@ const PokemonPage = () => {
    * 2. Type filter results
    * 3. Default paginated list
    */
-  const displayPokemon = search ? searchedPokemon : selectedType ? typeResults : pokemon
+const displayPokemon = search
+  ? searchedPokemon
+  : selectedType
+  ? typeResults
+  : sortBy !== "id"
+  ? allPokemon
+  : pokemon
 
   const sortedPokemon = [...displayPokemon].sort((a, b) => {
   switch (sortBy) {
