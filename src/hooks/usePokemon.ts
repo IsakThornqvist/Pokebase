@@ -122,6 +122,31 @@ export function usePokemon(page: number) {
     return { pokemon, loading, error }
 }
 
+export function useAllPokemon() {
+    const [pokemon, setPokemon] = useState<Pokemon[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
+
+    useEffect(() => {
+        async function fetchAll() {
+            try {
+                const data = await graphqlRequest<PokemonResponse>(POKEMON_QUERY, {
+                    limit: 1500,
+                    offset: 0
+                })
+                setPokemon(data.allPokemon)
+            } catch (error) {
+                setError("Error while getting all pokemon")
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchAll()
+    }, [])
+
+    return { pokemon, loading, error }
+}
+
 
 /**
  * Searches Pokémon by name.
@@ -175,7 +200,7 @@ export function useTypeSearchPokemon(type1: string) {
         async function fetchPokemonViaType() {
             try {
                 const data = await graphqlRequest<PokemonResponse>(POKEMON_QUERY, {
-                    limit: 10000,
+                    limit: 1500,
                     offset: 0
                 })
 
