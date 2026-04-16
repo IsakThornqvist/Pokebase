@@ -25,6 +25,7 @@ const PokemonPage = () => {
   /** Pagination state */
   const [page, setPage] = useState(1)
   const { pokemon, loading, error } = usePokemon(page)
+  const [sortBy, setSortBy] = useState<string>("id")
 
   /** Search state (debounced to avoid excessive API calls) */
   const [search, setSearch] = useState("")
@@ -47,6 +48,20 @@ const PokemonPage = () => {
    * 3. Default paginated list
    */
   const displayPokemon = search ? searchedPokemon : selectedType ? typeResults : pokemon
+
+  const sortedPokemon = [...displayPokemon].sort((a, b) => {
+  switch (sortBy) {
+    case "total": return (b.hp + b.attack + b.defense + b.spAttack + b.spDefense + b.speed)
+                       - (a.hp + a.attack + a.defense + a.spAttack + a.spDefense + a.speed)
+    case "hp":      return b.hp - a.hp
+    case "attack":  return b.attack - a.attack
+    case "defense": return b.defense - a.defense
+    case "spAttack":  return b.spAttack - a.spAttack
+    case "spDefense": return b.spDefense - a.spDefense
+    case "speed":   return b.speed - a.speed
+    default:        return a.id - b.id
+  }
+})
 
   /**
    * Determines loading state based on active mode.
@@ -101,6 +116,21 @@ const PokemonPage = () => {
           className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-800 placeholder-gray-400 outline-none focus:border-gray-400 focus:bg-white transition-colors duration-150"
         />
 
+        <select
+        value={sortBy}
+        onChange={(e) => setSortBy(e.target.value)}
+        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-800 outline-none focus:border-gray-400 focus:bg-white transition-colors duration-150"
+      >
+        <option value="id">Sort: Default (#)</option>
+        <option value="total">Sort: Total stats</option>
+        <option value="hp">Sort: HP</option>
+        <option value="attack">Sort: Attack</option>
+        <option value="defense">Sort: Defense</option>
+        <option value="spAttack">Sort: Sp. Attack</option>
+        <option value="spDefense">Sort: Sp. Defense</option>
+        <option value="speed">Sort: Speed</option>
+      </select>
+
         {/* Type filter pills */}
         <div className="flex flex-wrap gap-2">
           <button
@@ -142,12 +172,12 @@ const PokemonPage = () => {
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold text-gray-700">{pageTitle}</h2>
         <span className="text-xs font-medium text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">
-          {displayPokemon.length} found
+          {sortedPokemon.length} found
         </span>
       </div>
 
       {/* Empty state */}
-      {displayPokemon.length === 0 && !isLoading && (
+      {sortedPokemon.length === 0 && !isLoading && (
         <div className="flex flex-col items-center justify-center h-48 bg-white rounded-2xl border border-dashed border-gray-200">
           <p className="text-gray-400 text-sm font-medium">No Pokémon found</p>
           <p className="text-gray-300 text-xs mt-1">Try a different name or type filter</p>
@@ -156,7 +186,7 @@ const PokemonPage = () => {
 
       {/* Pokemon Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-        {displayPokemon.map((pokemon) => (
+        {sortedPokemon.map((pokemon) => (
           <PokemonCard key={pokemon.id} pokemon={pokemon} isShiny={isShiny} />
         ))}
       </div>
