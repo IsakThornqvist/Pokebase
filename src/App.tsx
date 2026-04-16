@@ -14,6 +14,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Pokemon from "./pages/PokemonPage"
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
+import StatisticsPage from "./pages/StatisticsPages"
+
 import { AuthProvider } from "./context/AuthContext"
 
 /**
@@ -31,6 +33,7 @@ function App() {
             
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/statistics" element={<StatisticsPage />} />
 
           </Routes>
         </div>
