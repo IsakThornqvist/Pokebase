@@ -23,6 +23,7 @@ const POKEMON_QUERY = `
       spDefense
       speed
       weight
+      height
     }
   }
 `
@@ -66,3 +67,4 @@ export function countTypes(pokemon: Pokemon[]): Record<string, number> {
     
     return typeCounts
 }
+

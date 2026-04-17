@@ -30,7 +30,7 @@ import {
 } from "recharts"
 
 /**
- * Extracts a numeric value from a string (e.g. "8.9 kg" → 8.9).
+ * Extracts a numeric value from a string (for example "8.9 kg" → 8.9).
  *
  * @param value - String containing a number
  * @returns Parsed number or NaN if invalid
@@ -142,12 +142,12 @@ const StatisticsPage = () => {
                 cursor={{ strokeDasharray: "3 3" }}
                 content={({ active, payload }) => {
                   if (active && payload?.length) {
-                    const d = payload[0].payload
+                    const data = payload[0].payload
                     return (
                       <div className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm shadow">
-                        <p className="font-semibold capitalize">{d.name}</p>
-                        <p className="text-gray-500">Height: {d.height}m</p>
-                        <p className="text-gray-500">Weight: {d.weight}kg</p>
+                        <p className="font-semibold capitalize">{data.name}</p>
+                        <p className="text-gray-500">Height: {data.height}m</p>
+                        <p className="text-gray-500">Weight: {data.weight}kg</p>
                       </div>
                     )
                   }
