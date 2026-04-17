@@ -13,8 +13,9 @@
  * @version 1.0.0
  */
 
+import { useState } from "react"
 import { useAllPokemonStats, countTypes } from "../hooks/useStatistics"
-import { typeHexColors } from "../types/types"
+import { typeHexColors, typeColors, types } from "../types/types"
 import {
   BarChart,
   Bar,
@@ -48,6 +49,7 @@ const StatisticsPage = () => {
 
   /** Fetch all Pokémon data for statistics */
   const { pokemon, loading, error } = useAllPokemonStats()
+  const [selectedScatterType, setSelectedScatterType] = useState<string>("Ground")
 
   /** Count Pokémon per type and sort descending */
   const sortedTypes = Object.entries(countTypes(pokemon)).sort(
@@ -59,6 +61,7 @@ const StatisticsPage = () => {
 
   /** Prepare height vs weight data for scatter diagram */
   const heightAndWeightData = pokemon
+    .filter(p => p.type1 === selectedScatterType || p.type2 === selectedScatterType)
     .map((p) => ({
       height: extractNumber(p.height),
       weight: extractNumber(p.weight),
@@ -70,9 +73,7 @@ const StatisticsPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="text-gray-400 text-sm animate-pulse">
-          Loading Statistics…
-        </p>
+        <p className="text-gray-400 text-sm animate-pulse">Loading Statistics…</p>
       </div>
     )
   }
@@ -80,9 +81,7 @@ const StatisticsPage = () => {
   if (error) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="text-red-400 text-sm">
-          Something went wrong. Please try again.
-        </p>
+        <p className="text-red-400 text-sm">Something went wrong. Please try again.</p>
       </div>
     )
   }
@@ -90,26 +89,17 @@ const StatisticsPage = () => {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
-          Statistics
-        </h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Overview of Pokémon by type.
-        </p>
+        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Statistics</h1>
+        <p className="text-sm text-gray-500 mt-1">Overview of Pokémon by type.</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        {/* Top Left */}
+
+        {/* Top Left - Bar chart */}
         <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <h2 className="text-sm font-semibold text-gray-700 mb-4">
-            Pokémon count per type
-          </h2>
+          <h2 className="text-sm font-semibold text-gray-700 mb-4">Pokémon count per type</h2>
           <ResponsiveContainer width="100%" height={400}>
-            <BarChart
-              data={chartData}
-              layout="horizontal"
-              margin={{ left: 60, right: 20 }}
-            >
+            <BarChart data={chartData} layout="horizontal" margin={{ left: 60, right: 20 }}>
               <XAxis type="category" dataKey="type" tick={{ fontSize: 12 }} />
               <YAxis type="number" tick={{ fontSize: 12 }} />
               <Tooltip
@@ -125,52 +115,62 @@ const StatisticsPage = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* Top Right */}
+        {/* Top Right - Scatter chart */}
         <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <h2 className="text-sm font-semibold text-gray-700 mb-4">
-            Statistics Section 2
-          </h2>
-          <ResponsiveContainer width="100%" height={400}>
-            <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+          <h2 className="text-sm font-semibold text-gray-700 mb-3">Height vs Weight</h2>
+
+          {/* Type filter buttons */}
+          <div className="flex flex-wrap gap-1.5 mb-4">
+            {types.map((type) => (
+              <button
+                key={type}
+                onClick={() => setSelectedScatterType(type)}
+                className={`text-xs font-semibold px-2.5 py-1 rounded-full transition-all duration-150 ${typeColors[type]}
+                  ${selectedScatterType === type ? "ring-2 ring-offset-1 ring-gray-400" : "opacity-50 hover:opacity-100"}`}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+
+          <ResponsiveContainer width="100%" height={340}>
+            <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 20 }}>
               <CartesianGrid />
-
-              <XAxis type="number" dataKey="height" name="Height" unit="m" />
-
-              <YAxis type="number" dataKey="weight" name="Weight" unit="kg" />
-
+              <XAxis type="number" dataKey="height" name="Height" unit="m" tick={{ fontSize: 12 }} />
+              <YAxis type="number" dataKey="weight" name="Weight" unit="kg" tick={{ fontSize: 12 }} />
               <Tooltip
                 cursor={{ strokeDasharray: "3 3" }}
-                formatter={(value, name) => [`${value}`, name]}
-                labelFormatter={(_, payload) => payload?.[0]?.payload?.name}
+                content={({ active, payload }) => {
+                  if (active && payload?.length) {
+                    const d = payload[0].payload
+                    return (
+                      <div className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm shadow">
+                        <p className="font-semibold capitalize">{d.name}</p>
+                        <p className="text-gray-500">Height: {d.height}m</p>
+                        <p className="text-gray-500">Weight: {d.weight}kg</p>
+                      </div>
+                    )
+                  }
+                  return null
+                }}
               />
-
-              <Scatter data={heightAndWeightData} dataKey="weight">
-                {heightAndWeightData.map((entry, index) => (
-                  <Cell
-                    key={index}
-                    fill={typeHexColors[entry.type] ?? "#8884d8"}
-                  />
-                ))}
-              </Scatter>
+              <Scatter data={heightAndWeightData} fill={typeHexColors[selectedScatterType] ?? "#8884d8"} opacity={0.8} />
             </ScatterChart>
           </ResponsiveContainer>
         </div>
 
         {/* Bottom Left */}
         <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <h2 className="text-sm font-semibold text-gray-700 mb-4">
-            Statistics Section 3
-          </h2>
-          <p> dunno yet </p>
+          <h2 className="text-sm font-semibold text-gray-700 mb-4">Statistics Section 3</h2>
+          <p>dunno yet</p>
         </div>
 
         {/* Bottom Right */}
         <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <h2 className="text-sm font-semibold text-gray-700 mb-4">
-            Statistics Section 4
-          </h2>
-          <p> dunno yet </p>
+          <h2 className="text-sm font-semibold text-gray-700 mb-4">Statistics Section 4</h2>
+          <p>dunno yet</p>
         </div>
+
       </div>
     </div>
   )
