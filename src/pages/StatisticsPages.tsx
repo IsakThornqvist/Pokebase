@@ -14,7 +14,7 @@
  */
 
 import { useState } from "react"
-import { useAllPokemonStats, countTypes } from "../hooks/useStatistics"
+import { useAllPokemonStats, countTypes, averageStastByType } from "../hooks/useStatistics"
 import { typeHexColors, typeColors, types } from "../types/types"
 import {
   BarChart,
@@ -26,7 +26,7 @@ import {
   Cell,
   ScatterChart,
   Scatter,
-  CartesianGrid,
+  CartesianGrid
 } from "recharts"
 
 /**
@@ -50,14 +50,17 @@ const StatisticsPage = () => {
   /** Fetch all Pokémon data for statistics */
   const { pokemon, loading, error } = useAllPokemonStats()
   const [selectedScatterType, setSelectedScatterType] = useState<string>("Ground")
+  const [selectedStat, setSelectedStat] = useState<string>("hp")
 
   /** Count Pokémon per type and sort descending */
   const sortedTypes = Object.entries(countTypes(pokemon)).sort(
     (a, b) => b[1] - a[1],
   )
 
+  const avgStatsData = averageStastByType(pokemon)
+
   /** Format data for bar chart */
-  const chartData = sortedTypes.map(([type, count]) => ({ type, count }))
+  const typeChartData = sortedTypes.map(([type, count]) => ({ type, count }))
 
   /** Prepare height vs weight data for scatter diagram */
   const heightAndWeightData = pokemon
@@ -99,7 +102,7 @@ const StatisticsPage = () => {
         <div className="bg-white border border-gray-200 rounded-lg p-5">
           <h2 className="text-sm font-semibold text-gray-700 mb-4">Pokémon count per type</h2>
           <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={chartData} layout="horizontal" margin={{ left: 60, right: 20 }}>
+            <BarChart data={typeChartData} layout="horizontal" margin={{ left: 60, right: 20 }}>
               <XAxis type="category" dataKey="type" tick={{ fontSize: 12 }} />
               <YAxis type="number" tick={{ fontSize: 12 }} />
               <Tooltip
@@ -107,7 +110,7 @@ const StatisticsPage = () => {
                 cursor={{ fill: "#f3f4f6" }}
               />
               <Bar dataKey="count" radius={[0, 4, 4, 0]}>
-                {chartData.map(({ type }) => (
+                {typeChartData.map(({ type }) => (
                   <Cell key={type} fill={typeHexColors[type] ?? "#aaaaaa"} />
                 ))}
               </Bar>
@@ -162,7 +165,21 @@ const StatisticsPage = () => {
         {/* Bottom Left */}
         <div className="bg-white border border-gray-200 rounded-lg p-5">
           <h2 className="text-sm font-semibold text-gray-700 mb-4">Statistics Section 3</h2>
-          <p>dunno yet</p>
+           <ResponsiveContainer width="100%" height={400}>
+            <BarChart data={avgStatsData} layout="horizontal" margin={{ left: 60, right: 20 }}>
+              <XAxis type="category" dataKey="type" tick={{ fontSize: 12 }} />
+              <YAxis type="number" tick={{ fontSize: 12 }} />
+              <Tooltip
+                formatter={(value) => [`${value} Avg`, "Count"]}
+                cursor={{ fill: "#f3f4f6" }}
+              />
+              <Bar dataKey={selectedStat} radius={[0, 4, 4, 0]}>
+                {avgStatsData.map(({ type }) => (
+                  <Cell key={type} fill={typeHexColors[type] ?? "#aaaaaa"} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
         </div>
 
         {/* Bottom Right */}
