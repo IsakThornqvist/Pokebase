@@ -68,3 +68,32 @@ export function countTypes(pokemon: Pokemon[]): Record<string, number> {
     return typeCounts
 }
 
+export function averageStastByType (pokemon: Pokemon[]) {
+
+    const statTypes: Record<string, { hp: number, attack: number, defense: number, spAttack: number, spDefense: number, speed: number, count: number }> = {}
+
+    pokemon.forEach(p => {
+        if (p.type1) {
+            if(!statTypes[p.type1]) {
+            statTypes[p.type1] = { hp: 0, attack: 0, defense: 0, spAttack: 0, spDefense: 0, speed: 0, count: 0 }
+        }
+        statTypes[p.type1].hp += p.hp ?? 0
+        statTypes[p.type1].attack += p.attack ?? 0
+        statTypes[p.type1].defense += p.defense ?? 0
+        statTypes[p.type1].spAttack += p.spAttack ?? 0
+        statTypes[p.type1].spDefense += p.spDefense ?? 0
+        statTypes[p.type1].speed += p.speed ?? 0
+        statTypes[p.type1].count += 1
+        }
+    })
+        return Object.entries(statTypes).map(([type, stats]) => ({
+            type,
+            hp: Math.round(stats.hp / stats.count),
+            attack: Math.round(stats.attack / stats.count),
+            defense: Math.round(stats.defense / stats.count),
+            spAttack: Math.round(stats.spAttack / stats.count),
+            spDefense: Math.round(stats.spDefense / stats.count),
+            speed: Math.round(stats.speed / stats.count),
+        }))
+    }
+
