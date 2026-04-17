@@ -1,3 +1,18 @@
+/**
+ * StatisticsPage component.
+ *
+ * Displays statistical insights about Pokémon data using charts.
+ * Includes:
+ * - Bar chart for Pokémon count per type
+ * - Scatter plot for height vs weight
+ * - ??
+ * - ?????
+ * Data is fetched via custom hooks and transformed for visualization.
+ *
+ * @author Isak Thörnqvist
+ * @version 1.0.0
+ */
+
 import { useAllPokemonStats, countTypes } from "../hooks/useStatistics"
 import { typeHexColors } from "../types/types"
 import {
@@ -13,18 +28,36 @@ import {
   CartesianGrid,
 } from "recharts"
 
+/**
+ * Extracts a numeric value from a string (e.g. "8.9 kg" → 8.9).
+ *
+ * @param value - String containing a number
+ * @returns Parsed number or NaN if invalid
+ */
 function extractNumber(value: string | null | undefined): number {
   return parseFloat(value?.match(/[\d.]+/)?.[0] ?? "")
 }
 
+/**
+ * Extracts a numeric value from a string (e.g. "6.9 kg" → 6.9).
+ *
+ * @param value - String containing a number
+ * @returns Parsed number or NaN if invalid
+ */
 const StatisticsPage = () => {
+
+  /** Fetch all Pokémon data for statistics */
   const { pokemon, loading, error } = useAllPokemonStats()
 
+  /** Count Pokémon per type and sort descending */
   const sortedTypes = Object.entries(countTypes(pokemon)).sort(
     (a, b) => b[1] - a[1],
   )
+
+  /** Format data for bar chart */
   const chartData = sortedTypes.map(([type, count]) => ({ type, count }))
 
+  /** Prepare height vs weight data for scatter diagram */
   const heightAndWeightData = pokemon
     .map((p) => ({
       height: extractNumber(p.height),
