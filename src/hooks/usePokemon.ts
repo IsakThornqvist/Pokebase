@@ -14,7 +14,7 @@ import { useState, useEffect } from "react"
 /**
  * Response type for fetching all Pokémon.
  */
-interface PokemonResponse {
+export interface PokemonResponse {
     allPokemon: Pokemon[]
 }
 
@@ -49,6 +49,7 @@ const POKEMON_QUERY = `
       spDefense
       speed
       weight
+      height
     }
   }
 `
