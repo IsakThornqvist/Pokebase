@@ -14,7 +14,11 @@
  */
 
 import { useState } from "react"
-import { useAllPokemonStats, countTypes, averageStastByType } from "../hooks/useStatistics"
+import {
+  useAllPokemonStats,
+  countTypes,
+  averageStastByType,
+} from "../hooks/useStatistics"
 import { typeHexColors, typeColors, types } from "../types/types"
 import {
   BarChart,
@@ -26,7 +30,7 @@ import {
   Cell,
   ScatterChart,
   Scatter,
-  CartesianGrid
+  CartesianGrid,
 } from "recharts"
 
 /**
@@ -46,11 +50,11 @@ function extractNumber(value: string | null | undefined): number {
  * @returns Parsed number or NaN if invalid
  */
 const StatisticsPage = () => {
-
   /** Fetch all Pokémon data for statistics */
   const { pokemon, loading, error } = useAllPokemonStats()
-  const [selectedScatterType, setSelectedScatterType] = useState<string>("Ground")
-  const [selectedStat, setSelectedStat] = useState<string>("hp")
+  const [selectedScatterType, setSelectedScatterType] =
+    useState<string>("Ground")
+  const [selectedStat, setSelectedStat] = useState<string>("attack")
 
   /** Count Pokémon per type and sort descending */
   const sortedTypes = Object.entries(countTypes(pokemon)).sort(
@@ -64,7 +68,9 @@ const StatisticsPage = () => {
 
   /** Prepare height vs weight data for scatter diagram */
   const heightAndWeightData = pokemon
-    .filter(p => p.type1 === selectedScatterType || p.type2 === selectedScatterType)
+    .filter(
+      (p) => p.type1 === selectedScatterType || p.type2 === selectedScatterType,
+    )
     .map((p) => ({
       height: extractNumber(p.height),
       weight: extractNumber(p.weight),
@@ -76,7 +82,9 @@ const StatisticsPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="text-gray-400 text-sm animate-pulse">Loading Statistics…</p>
+        <p className="text-gray-400 text-sm animate-pulse">
+          Loading Statistics…
+        </p>
       </div>
     )
   }
@@ -84,7 +92,9 @@ const StatisticsPage = () => {
   if (error) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="text-red-400 text-sm">Something went wrong. Please try again.</p>
+        <p className="text-red-400 text-sm">
+          Something went wrong. Please try again.
+        </p>
       </div>
     )
   }
@@ -92,17 +102,26 @@ const StatisticsPage = () => {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Statistics</h1>
-        <p className="text-sm text-gray-500 mt-1">Overview of Pokémon by type.</p>
+        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+          Statistics
+        </h1>
+        <p className="text-sm text-gray-500 mt-1">
+          Overview of Pokémon by type.
+        </p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-
         {/* Top Left - Bar chart */}
         <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <h2 className="text-sm font-semibold text-gray-700 mb-4">Pokémon count per type</h2>
+          <h2 className="text-sm font-semibold text-gray-700 mb-4">
+            Pokémon count per type
+          </h2>
           <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={typeChartData} layout="horizontal" margin={{ left: 60, right: 20 }}>
+            <BarChart
+              data={typeChartData}
+              layout="horizontal"
+              margin={{ left: 60, right: 20 }}
+            >
               <XAxis type="category" dataKey="type" tick={{ fontSize: 12 }} />
               <YAxis type="number" tick={{ fontSize: 12 }} />
               <Tooltip
@@ -120,7 +139,9 @@ const StatisticsPage = () => {
 
         {/* Top Right - Scatter chart */}
         <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <h2 className="text-sm font-semibold text-gray-700 mb-3">Height vs Weight</h2>
+          <h2 className="text-sm font-semibold text-gray-700 mb-3">
+            Height vs Weight
+          </h2>
 
           {/* Type filter buttons */}
           <div className="flex flex-wrap gap-1.5 mb-4">
@@ -139,8 +160,20 @@ const StatisticsPage = () => {
           <ResponsiveContainer width="100%" height={340}>
             <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 20 }}>
               <CartesianGrid />
-              <XAxis type="number" dataKey="height" name="Height" unit="m" tick={{ fontSize: 12 }} />
-              <YAxis type="number" dataKey="weight" name="Weight" unit="kg" tick={{ fontSize: 12 }} />
+              <XAxis
+                type="number"
+                dataKey="height"
+                name="Height"
+                unit="m"
+                tick={{ fontSize: 12 }}
+              />
+              <YAxis
+                type="number"
+                dataKey="weight"
+                name="Weight"
+                unit="kg"
+                tick={{ fontSize: 12 }}
+              />
               <Tooltip
                 cursor={{ strokeDasharray: "3 3" }}
                 content={({ active, payload }) => {
@@ -157,20 +190,45 @@ const StatisticsPage = () => {
                   return null
                 }}
               />
-              <Scatter data={heightAndWeightData} fill={typeHexColors[selectedScatterType] ?? "#8884d8"} opacity={0.8} />
+              <Scatter
+                data={heightAndWeightData}
+                fill={typeHexColors[selectedScatterType] ?? "#8884d8"}
+                opacity={0.8}
+              />
             </ScatterChart>
           </ResponsiveContainer>
         </div>
 
         {/* Bottom Left */}
         <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <h2 className="text-sm font-semibold text-gray-700 mb-4">Statistics Section 3</h2>
-           <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={avgStatsData} layout="horizontal" margin={{ left: 60, right: 20 }}>
+          <h2 className="text-sm font-semibold text-gray-700 mb-4">
+            Statistics Section 3
+          </h2>
+
+          <div className="flex flex-wrap gap-1.5 mb-4">
+            {["hp", "attack", "defense", "spAttack", "spDefense", "speed"].map(
+              (stat) => (
+                <button
+                  key={stat}
+                  onClick={() => setSelectedStat(stat)}
+                  className={`text-xs font-semibold px-2.5 py-1 rounded-full transition-all duration-150 bg-gray-100 text-gray-700
+        ${selectedStat === stat ? "ring-2 ring-offset-1 ring-gray-400 opacity-100" : "opacity-50 hover:opacity-100"}`}
+                >
+                  {stat}
+                </button>
+              ),
+            )}
+          </div>
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart
+              data={avgStatsData}
+              layout="horizontal"
+              margin={{ left: 60, right: 20 }}
+            >
               <XAxis type="category" dataKey="type" tick={{ fontSize: 12 }} />
               <YAxis type="number" tick={{ fontSize: 12 }} />
               <Tooltip
-                formatter={(value) => [`${value} Avg`, "Count"]}
+                formatter={(value) => [`${value}`, "??? Avg"]}
                 cursor={{ fill: "#f3f4f6" }}
               />
               <Bar dataKey={selectedStat} radius={[0, 4, 4, 0]}>
@@ -184,10 +242,11 @@ const StatisticsPage = () => {
 
         {/* Bottom Right */}
         <div className="bg-white border border-gray-200 rounded-lg p-5">
-          <h2 className="text-sm font-semibold text-gray-700 mb-4">Statistics Section 4</h2>
+          <h2 className="text-sm font-semibold text-gray-700 mb-4">
+            Statistics Section 4
+          </h2>
           <p>dunno yet</p>
         </div>
-
       </div>
     </div>
   )
