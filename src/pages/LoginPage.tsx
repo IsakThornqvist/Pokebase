@@ -49,7 +49,7 @@ return (
                 <div className="w-10 h-10 rounded-lg bg-gray-900 flex items-center justify-center mb-3">
                     <span className="text-white text-base font-bold">P</span>
                 </div>
-                <h1 className="text-lg font-semibold text-gray-900">Pokébuilder</h1>
+                <h1 className="text-lg font-semibold text-gray-900">Pokebase</h1>
                 <p className="text-sm text-gray-500 mt-0.5">Sign in to your account</p>
             </div>
 
