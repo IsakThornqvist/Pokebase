@@ -5,7 +5,7 @@
  * Includes:
  * - Bar chart for Pokémon count per type
  * - Bar chart for average stats per type
- * - Scatter plot for height vs weight
+ * - Scatter plot for height vs weight with multi-type selection
  *
  * Data is fetched via custom hooks and transformed for visualization.
  *
@@ -60,24 +60,26 @@ const statLabels: Record<string, string> = {
  */
 const StatisticsPage = () => {
   const { pokemon, loading, error } = useAllPokemonStats()
-  const [selectedScatterType, setSelectedScatterType] = useState<string>("Ground")
+  const [selectedScatterTypes, setSelectedScatterTypes] = useState<string[]>(["Ground"])
   const [selectedStat, setSelectedStat] = useState<string>("attack")
+
+  /**
+   * Toggles a type in the scatter chart selection.
+   * Adds if not present, removes if already selected.
+   */
+  function toggleType(type: string) {
+    setSelectedScatterTypes(prev =>
+      prev.includes(type)
+        ? prev.filter(t => t !== type)
+        : [...prev, type]
+    )
+  }
 
   const sortedTypes = Object.entries(countTypes(pokemon)).sort(
     (a, b) => b[1] - a[1],
   )
   const avgStatsData = averageStastByType(pokemon)
   const typeChartData = sortedTypes.map(([type, count]) => ({ type, count }))
-
-  const heightAndWeightData = pokemon
-    .filter((p) => p.type1 === selectedScatterType || p.type2 === selectedScatterType)
-    .map((p) => ({
-      height: extractNumber(p.height),
-      weight: extractNumber(p.weight),
-      name: p.name,
-      type: p.type1,
-    }))
-    .filter((p) => !isNaN(p.height) && !isNaN(p.weight))
 
   if (loading) {
     return (
@@ -164,9 +166,9 @@ const StatisticsPage = () => {
             {types.map((type) => (
               <button
                 key={type}
-                onClick={() => setSelectedScatterType(type)}
+                onClick={() => toggleType(type)}
                 className={`text-xs font-semibold px-2.5 py-1 rounded-full transition-all duration-150 ${typeColors[type]}
-                  ${selectedScatterType === type ? "ring-2 ring-offset-1 ring-gray-400" : "opacity-50 hover:opacity-100"}`}
+                  ${selectedScatterTypes.includes(type) ? "ring-2 ring-offset-1 ring-gray-400" : "opacity-50 hover:opacity-100"}`}
               >
                 {type}
               </button>
@@ -193,11 +195,27 @@ const StatisticsPage = () => {
                   return null
                 }}
               />
-              <Scatter
-                data={heightAndWeightData}
-                fill={typeHexColors[selectedScatterType] ?? "#8884d8"}
-                opacity={0.8}
-              />
+              {selectedScatterTypes.map(type => {
+                const data = pokemon
+                  .filter(p => p.type1 === type || p.type2 === type)
+                  .map(p => ({
+                    height: extractNumber(p.height),
+                    weight: extractNumber(p.weight),
+                    name: p.name,
+                    type: p.type1,
+                  }))
+                  .filter(p => !isNaN(p.height) && !isNaN(p.weight))
+
+                return (
+                  <Scatter
+                    key={type}
+                    name={type}
+                    data={data}
+                    fill={typeHexColors[type] ?? "#aaaaaa"}
+                    opacity={0.8}
+                  />
+                )
+              })}
             </ScatterChart>
           </ResponsiveContainer>
         </div>
