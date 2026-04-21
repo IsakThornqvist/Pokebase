@@ -47,13 +47,13 @@ app.get("/auth/github/callback", async (req, res) => {
     try {
       const loginResponse = await axios.post(`${process.env.API_URL}/login`, {
         email: primaryEmail,
-        password: "github_oauth",
+        password: process.env.OAUTH_SECRET,
       })
       jwt = loginResponse.data.token
     } catch {
       const registerResponse = await axios.post(`${process.env.API_URL}/register`, {
         email: primaryEmail,
-        password: "github_oauth",
+        password: process.env.OAUTH_SECRET,
       })
       jwt = registerResponse.data.token
     }
