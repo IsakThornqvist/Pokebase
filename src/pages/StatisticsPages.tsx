@@ -43,6 +43,15 @@ function extractNumber(value: string | null | undefined): number {
   return parseFloat(value?.match(/[\d.]+/)?.[0] ?? "")
 }
 
+const statLabels: Record<string, string> = {
+  hp: "HP",
+  attack: "Attack",
+  defense: "Defense",
+  spAttack: "Sp. Attack",
+  spDefense: "Sp. Defense",
+  speed: "Speed"
+}
+
 /**
  * Extracts a numeric value from a string (e.g. "6.9 kg" → 6.9).
  *
@@ -228,7 +237,7 @@ const StatisticsPage = () => {
               <XAxis type="category" dataKey="type" tick={{ fontSize: 12 }} />
               <YAxis type="number" tick={{ fontSize: 12 }} />
               <Tooltip
-                formatter={(value) => [`${value}`, "??? Avg"]}
+                formatter={(value) => [value, `Avg ${statLabels[selectedStat]}`]}
                 cursor={{ fill: "#f3f4f6" }}
               />
               <Bar dataKey={selectedStat} radius={[0, 4, 4, 0]}>
