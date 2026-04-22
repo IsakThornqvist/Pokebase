@@ -17,6 +17,7 @@ import RegisterPage from "./pages/RegisterPage"
 import StatisticsPage from "./pages/StatisticsPages"
 import HomePage from "./pages/HomePage"
 
+/* import ProtectedRoute from "./components/ProtectedRoute" */
 import { AuthProvider } from "./context/AuthContext"
 import OAuthCallback from "./pages/OAuthCallback"
 
