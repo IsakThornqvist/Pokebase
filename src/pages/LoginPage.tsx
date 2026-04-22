@@ -92,6 +92,21 @@ return (
                 >
                     Sign in
                 </button>
+
+                {/* Divider */}
+                <div className="flex items-center gap-3">
+                    <div className="flex-1 border-t border-gray-200" />
+                    <span className="text-xs text-gray-400">or</span>
+                    <div className="flex-1 border-t border-gray-200" />
+                </div>
+
+                {/* GitHub OAuth */}
+                <a
+                    href={`${import.meta.env.VITE_AUTH_URL}/auth/github`}
+                    className="w-full py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors text-center block"
+                >
+                    Sign in with GitHub
+                </a>
             </div>
 
             <p className="text-center text-sm text-gray-500 mt-4">
