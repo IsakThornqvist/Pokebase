@@ -56,11 +56,15 @@ try {
   })
 
   const loginData = loginResponse.data
+  console.log("Login response:", JSON.stringify(loginData))
+  
   if (loginData.errors) throw new Error("Login failed")
   jwt = loginData.data.login.token
+  console.log("JWT set:", jwt)
 
-} catch {
-  // If login fails, register instead
+} catch (err) {
+  console.log("Login failed, trying register...", err.message)
+  
   const registerResponse = await axios.post(process.env.API_URL, {
     query: `
       mutation {
@@ -70,10 +74,11 @@ try {
       }
     `
   })
-
+  console.log("Register response:", JSON.stringify(registerResponse.data))
   jwt = registerResponse.data.data.register.token
 }
 
+console.log("Final JWT:", jwt)
     // Send JWT back to React app
     res.redirect(`${process.env.FRONTEND_URL}/oauth/callback?token=${jwt}`)
 
