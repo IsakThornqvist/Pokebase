@@ -22,16 +22,16 @@ The dataset covers all mainline Pokémon with attributes including base stats (H
 *Explain how to interact with your visualization (controls, filters, etc.). Screenshots/gifs are encouraged.*
 
 
-![Stat Page](../assignment-wt/public/images/pokemon/StatPage.png)
+![Stat Page](public/images/pokemon/StatPage.png)
 Overview of the Statistics Page
 
-![Bar Chart 1](../assignment-wt/public/images/pokemon/BarChart1.png)
+![Bar Chart 1](public/images/pokemon/BarChart1.png)
 This Bar Chart shows all pokemon and their types and sorts them in order of how many pokemon belongs to each type. A hover effect exists that shiws the number of pokemon belonging to that type.
 
-![Bar Chart 2](../assignment-wt/public/images/pokemon/BarChart2.png)
+![Bar Chart 2](public/images/pokemon/BarChart2.png)
 This Bar Chart shows the average stats for each type and allows the user to change what type to display via the buttons. Hover over a certain bar to see the average for that type.
 
-![Scatter Chart](../assignment-wt/public/images/pokemon/ScatterChart.png)
+![Scatter Chart](public/images/pokemon/ScatterChart.png)
 The Scatter Chart shows the height and weight of each pokemon and allows the user to choose hich types they want to display and compare at the same time.
 
 
