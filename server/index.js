@@ -44,19 +44,35 @@ app.get("/auth/github/callback", async (req, res) => {
     // Try to login first, if that fails register
     let jwt = null
 
-    try {
-      const loginResponse = await axios.post(`${process.env.API_URL}/login`, {
-        email: primaryEmail,
-        password: process.env.OAUTH_SECRET,
-      })
-      jwt = loginResponse.data.token
-    } catch {
-      const registerResponse = await axios.post(`${process.env.API_URL}/register`, {
-        email: primaryEmail,
-        password: process.env.OAUTH_SECRET,
-      })
-      jwt = registerResponse.data.token
-    }
+try {
+  const loginResponse = await axios.post(process.env.API_URL, {
+    query: `
+      mutation {
+        login(email: "${primaryEmail}", password: "${process.env.OAUTH_SECRET}") {
+          token
+        }
+      }
+    `
+  })
+
+  const loginData = loginResponse.data
+  if (loginData.errors) throw new Error("Login failed")
+  jwt = loginData.data.login.token
+
+} catch {
+  // If login fails, register instead
+  const registerResponse = await axios.post(process.env.API_URL, {
+    query: `
+      mutation {
+        register(email: "${primaryEmail}", password: "${process.env.OAUTH_SECRET}") {
+          token
+        }
+      }
+    `
+  })
+
+  jwt = registerResponse.data.data.register.token
+}
 
     // Send JWT back to React app
     res.redirect(`${process.env.FRONTEND_URL}/oauth/callback?token=${jwt}`)
