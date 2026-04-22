@@ -1,20 +1,22 @@
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "../context/AuthContext"
 
 const OAuthCallback = () => {
   const navigate = useNavigate()
+  const { login } = useAuth()
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const token = params.get("token")
 
     if (token) {
-      localStorage.setItem("token", token)
-      navigate("/")
+      login(token)
+      navigate("/pokemon")
     } else {
       navigate("/login?error=oauth_failed")
     }
-  }, [])
+  }, [navigate])
 
   return (
     <div className="flex items-center justify-center h-64">
