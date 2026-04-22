@@ -18,6 +18,7 @@ import StatisticsPage from "./pages/StatisticsPages"
 import HomePage from "./pages/HomePage"
 
 import { AuthProvider } from "./context/AuthContext"
+import OAuthCallback from "./pages/OAuthCallback"
 
 /**
  * Renders the main application layout and routes.
@@ -37,6 +38,7 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/statistics" element={<StatisticsPage />} />
             <Route path="/" element={<HomePage />} />
+            <Route path="/oauth/callback" element={<OAuthCallback />} />
 
           </Routes>
         </div>
