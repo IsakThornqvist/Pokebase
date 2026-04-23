@@ -1,5 +1,5 @@
 /**
- * OAuthCallback
+ * OAuthCallback.
  *
  * 
  * @author Isak Thörnqvist
