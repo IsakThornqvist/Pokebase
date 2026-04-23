@@ -1,7 +1,6 @@
 /**
  * OAuthCallback
  *
- *
  * @author Isak Thörnqvist
  * @version 1.0.0
  */
