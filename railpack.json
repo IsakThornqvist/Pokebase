@@ -1,0 +1,5 @@
+{
+  "staticSite": {
+    "outputDir": "dist"
+  }
+}
