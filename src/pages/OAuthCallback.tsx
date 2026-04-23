@@ -1,3 +1,11 @@
+/**
+ * OAuthCallback
+ *
+ *
+ * @author Isak Thörnqvist
+ * @version 1.0.0
+ */
+
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
