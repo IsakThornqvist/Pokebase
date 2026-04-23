@@ -56,17 +56,17 @@ const displayPokemon = search
   ? allPokemon
   : pokemon
 
-  const sortedPokemon = [...displayPokemon].sort((a, b) => {
+const sortedPokemon = [...displayPokemon].sort((a, b) => {
   switch (sortBy) {
-    case "total": return (b.hp + b.attack + b.defense + b.spAttack + b.spDefense + b.speed)
-                       - (a.hp + a.attack + a.defense + a.spAttack + a.spDefense + a.speed)
-    case "hp":      return b.hp - a.hp
-    case "attack":  return b.attack - a.attack
-    case "defense": return b.defense - a.defense
-    case "spAttack":  return b.spAttack - a.spAttack
-    case "spDefense": return b.spDefense - a.spDefense
-    case "speed":   return b.speed - a.speed
-    default:        return a.id - b.id
+    case "total": return ((b.hp ?? 0) + (b.attack ?? 0) + (b.defense ?? 0) + (b.spAttack ?? 0) + (b.spDefense ?? 0) + (b.speed ?? 0))
+                       - ((a.hp ?? 0) + (a.attack ?? 0) + (a.defense ?? 0) + (a.spAttack ?? 0) + (a.spDefense ?? 0) + (a.speed ?? 0))
+    case "hp":      return (b.hp ?? 0) - (a.hp ?? 0)
+    case "attack":  return (b.attack ?? 0) - (a.attack ?? 0)
+    case "defense": return (b.defense ?? 0) - (a.defense ?? 0)
+    case "spAttack":  return (b.spAttack ?? 0) - (a.spAttack ?? 0)
+    case "spDefense": return (b.spDefense ?? 0) - (a.spDefense ?? 0)
+    case "speed":   return (b.speed ?? 0) - (a.speed ?? 0)
+    default: return parseInt(a.id) - parseInt(b.id)
   }
 })
 

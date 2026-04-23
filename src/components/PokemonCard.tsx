@@ -84,7 +84,7 @@ const getTypeColor = (type: string) => typeColors[type] ?? "bg-gray-100 text-gra
             { label: "SPATK", value: pokemon.spAttack },
             { label: "SPDEF", value: pokemon.spDefense },
             { label: "SPD", value: pokemon.speed },
-            { label: "TOTAL", value: pokemon.hp + pokemon.attack + pokemon.defense + pokemon.spAttack + pokemon.spDefense + pokemon.speed},
+            { label: "TOTAL", value: (pokemon.hp ?? 0) + (pokemon.attack ?? 0) + (pokemon.defense ?? 0) + (pokemon.spAttack ?? 0) + (pokemon.spDefense ?? 0) + (pokemon.speed ?? 0) }
 
 
             

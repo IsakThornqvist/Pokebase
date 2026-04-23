@@ -70,24 +70,6 @@ const SEARCH_QUERY = `
 `
 
 /**
- * GraphQL query for filtering Pokémon by type.
- */
-const TYPE_QUERY = `
-  query ($type1: String!) {
-    pokemonByType(type1: $type1) {
-      id
-      name
-      type1
-      type2
-      hp
-      attack
-      defense
-      speed
-    }
-  }
-`
-
-/**
  * Number of Pokémon per page.
  */
 const LIMIT = 20
