@@ -27,7 +27,55 @@ const MY_TEAMS_QUERY = `
   }
 `
 
+const CREATE_TEAM_MUTATION = `
+  mutation($name: String!) {
+    createTeam(name: $name) {
+      id
+      name
+      members {
+        id
+        pokemon {
+          id
+          name
+        }
+      }
+      createdAt
+    }
+  }
+`
 
+const ADD_POKEMON_MUTATION = `
+  mutation($teamId: ID!, $pokemonId: ID!) {
+    addPokemonToTeam(teamId: $teamId, pokemonId: $pokemonId) {
+      id
+      name
+      members {
+        id
+        pokemon {
+          id
+          name
+        }
+      }
+    }
+  }
+`
+
+export async function addPokemonToTeam(teamId: string, pokemonId: string, token: string | null) {
+    return await graphqlRequest<{ addPokemonToTeam: Team }>(
+        ADD_POKEMON_MUTATION,
+        { teamId, pokemonId },
+        token
+    )
+}
+
+
+export async function createTeam(name: string, token: string | null) {
+    return await graphqlRequest<{ createTeam: Team }>(
+        CREATE_TEAM_MUTATION,
+        { name },
+        token
+    )
+}
 
 export function useMyTeams(token: string | null) {
 
