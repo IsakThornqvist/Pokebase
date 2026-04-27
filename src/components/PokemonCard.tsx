@@ -44,7 +44,7 @@ const PokemonCard = ({ pokemon, isShiny = false, selectedTeamId, onAddToTeam }: 
   const getTypeColor = (type: string) => typeColors[type] ?? "bg-gray-100 text-gray-500"
 
   return (
-    <div className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer overflow-hidden flex flex-col">
+    <div className="group bg-white rounded-x0.5 border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer overflow-hidden flex flex-col">
 
       {/* Image area */}
       <div className="relative flex justify-center items-center bg-gradient-to-b from-gray-50 to-gray-100 pt-5 pb-2 px-4">
