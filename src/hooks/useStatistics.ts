@@ -1,14 +1,29 @@
+/**
+ * Statistics hooks and utilities.
+ *
+ * Provides data fetching and aggregation functions
+ * for Pokémon statistics visualizations.
+ *
+ * @author Isak Thörnqvist
+ * @version 1.0.0
+ */
+
 import { useEffect, useState } from "react"
 import { graphqlRequest } from "../utils/graphql"
 import type { Pokemon } from "../types"
 
 
+/**
+ * Response type for fetching all Pokémon.
+ */
 interface PokemonResponse {
     allPokemon: Pokemon[]
 }
 
 
-
+/**
+ * GraphQL query for fetching all Pokémon with stats.
+*/
 const POKEMON_QUERY = `
   query ($limit: Int, $offset: Int) {
     allPokemon(limit: $limit, offset: $offset) {
@@ -28,6 +43,13 @@ const POKEMON_QUERY = `
   }
 `
 
+/**
+ * Fetches all Pokémon for use in statistics calculations.
+ *
+ * Uses a high limit to retrieve the full dataset in one request.
+ *
+ * @returns {{ pokemon: Pokemon[], loading: boolean, error: string | null }}
+ */
 export function useAllPokemonStats () {
 
     const [pokemon, setPokemon] = useState<Pokemon[]>([])
@@ -53,6 +75,15 @@ export function useAllPokemonStats () {
     return { pokemon, loading, error}
 }
 
+/**
+ * Counts the number of Pokémon per type.
+ *
+ * Both type1 and type2 are counted, so a dual-type
+ * Pokémon contributes to two type totals.
+ *
+ * @param {Pokemon[]} pokemon - List of Pokémon to count.
+ * @returns {Record<string, number>} Map of type name to count.
+ */
 export function countTypes(pokemon: Pokemon[]): Record<string, number> {
     const typeCounts: Record<string, number> = {}
     
@@ -68,6 +99,15 @@ export function countTypes(pokemon: Pokemon[]): Record<string, number> {
     return typeCounts
 }
 
+/**
+ * Calculates average base stats per Pokémon type.
+ *
+ * Only considers type1 for grouping. Stats are rounded
+ * to the nearest integer.
+ *
+ * @param {Pokemon[]} pokemon - List of Pokémon to aggregate.
+ * @returns Array of objects with type name and averaged stats.
+ */
 export function averageStastByType (pokemon: Pokemon[]) {
 
     const statTypes: Record<string, { hp: number, attack: number, defense: number, spAttack: number, spDefense: number, speed: number, count: number }> = {}
