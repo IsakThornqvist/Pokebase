@@ -68,6 +68,46 @@ const DELETE_TEAM_MUTATION = `
   }
 `
 
+const REMOVE_POKEMON_MUTATION = `
+  mutation($teamId: ID!, $pokemonId: ID!) {
+    removePokemonFromTeam(teamId: $teamId, pokemonId: $pokemonId) {
+      id
+      name
+      members {
+        id
+        pokemon {
+          id
+          name
+        }
+      }
+    }
+  }
+`
+
+const UPDATE_TEAM_MUTATION = `
+  mutation($teamId: ID!, $name: String!) {
+    updateTeam(teamId: $teamId, name: $name) {
+      id
+      name
+    }
+  }
+`
+
+export async function removePokemonFromTeam(teamId: string, pokemonId: string, token: string | null) {
+    return await graphqlRequest<{ removePokemonFromTeam: Team }>(
+        REMOVE_POKEMON_MUTATION,
+        { teamId, pokemonId },
+        token
+    )
+}
+
+export async function updateTeam(teamId: string, name: string, token: string | null) {
+    return await graphqlRequest<{ updateTeam: Team }>(
+        UPDATE_TEAM_MUTATION,
+        { teamId, name },
+        token
+    )
+}
 
 export async function deleteTeam(teamId: string, token: string | null) {
     return await graphqlRequest<{ deleteTeam: { id: string } }>(
