@@ -37,7 +37,7 @@ export interface TeamMember {
 export interface Team {
   id: string
   name: string
-  user: User
+  user?: User
   members: TeamMember[]
   createdAt: string
 }
