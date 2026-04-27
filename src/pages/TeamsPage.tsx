@@ -95,8 +95,8 @@ const TeamsPage = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {teams.map((team) => (
-          <div key={team.id} className="bg-white border border-gray-200 rounded-lg p-4 flex flex-col gap-3">
-            
+          <div key={team.id} className="bg-white border border-gray-200 rounded-lg p-4 flex flex-col gap-4">
+
             {/* Team header */}
             <div className="flex items-center justify-between">
               {editingTeamId === team.id ? (
@@ -123,7 +123,10 @@ const TeamsPage = () => {
                 </div>
               ) : (
                 <>
-                  <h2 className="text-sm font-semibold text-gray-900">{team.name}</h2>
+                  <div>
+                    <h2 className="text-sm font-semibold text-gray-900">{team.name}</h2>
+                    <p className="text-xs text-gray-400 mt-0.5">{team.members.length}/6 Pokémon</p>
+                  </div>
                   <div className="flex gap-3">
                     <button
                       onClick={() => {
@@ -152,30 +155,31 @@ const TeamsPage = () => {
               )}
             </div>
 
-            {/* Pokemon sprites with remove button */}
-            <div className="flex flex-wrap gap-2">
-              {team.members.map((member) => (
-                <div key={member.id} className="relative group/pokemon">
-                  <img
-                    src={`https://img.pokemondb.net/sprites/home/normal/${member.pokemon.name.toLowerCase()}.png`}
-                    alt={member.pokemon.name}
-                    className="w-10 h-10 object-contain"
-                  />
-                  <button
-                    onClick={() => handleRemovePokemon(team.id, member.pokemon.id)}
-                    className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-xs hidden group-hover/pokemon:flex items-center justify-center leading-none"
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
-              {team.members.length === 0 && (
-                <p className="text-xs text-gray-400">No Pokémon yet</p>
-              )}
+            {/* 6 Pokemon slots */}
+            <div className="grid grid-cols-6 gap-1">
+              {Array.from({ length: 6 }).map((_, index) => {
+                const member = team.members[index]
+                return member ? (
+                  <div key={member.id} className="relative group/pokemon aspect-square bg-gray-50 rounded-lg flex items-center justify-center">
+                    <img
+                      src={`https://img.pokemondb.net/sprites/home/normal/${member.pokemon.name.toLowerCase()}.png`}
+                      alt={member.pokemon.name}
+                      className="w-full h-full object-contain p-1"
+                    />
+                    <button
+                      onClick={() => handleRemovePokemon(team.id, member.pokemon.id)}
+                      className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-xs hidden group-hover/pokemon:flex items-center justify-center leading-none"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ) : (
+                  <div key={index} className="aspect-square bg-gray-50 rounded-lg border border-dashed border-gray-200 flex items-center justify-center">
+                    <span className="text-gray-300 text-lg">+</span>
+                  </div>
+                )
+              })}
             </div>
-
-            {/* Member count */}
-            <p className="text-xs text-gray-400">{team.members.length}/6 Pokémon</p>
 
           </div>
         ))}
