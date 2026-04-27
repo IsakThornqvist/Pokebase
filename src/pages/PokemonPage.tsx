@@ -20,6 +20,9 @@ import PokemonCard from "../components/PokemonCard"
 import { useState } from "react"
 import { types, typeColors } from "../types/types"
 import { useDelay } from "../hooks/useDelay"
+import { useMyTeams, addPokemonToTeam } from "../hooks/useTeams"
+import { useAuth } from "../context/AuthContext"
+
 
 const PokemonPage = () => {
   /** Pagination state */
@@ -32,6 +35,7 @@ const PokemonPage = () => {
   const delaySearch = useDelay(search, 500)
   const { pokemon: searchedPokemon, loading: searchLoading, error: searchError } = useSearchPokemon(delaySearch)
 
+  const { token } = useAuth()
   /** Type filter state */
   const [selectedType, setSelectedType] = useState("")
   const { pokemon: typeResults } = useTypeSearchPokemon(selectedType)
@@ -39,6 +43,9 @@ const PokemonPage = () => {
   /** Toggle shiny sprites */
   const [isShiny, setIsShiny] = useState(false)
   const { pokemon: allPokemon } = useAllPokemon()
+
+  const { teams } = useMyTeams(token)
+const [selectedTeamId, setSelectedTeamId] = useState<string>("")
 
   /**
    * Determines which dataset to display.
@@ -138,6 +145,7 @@ const sortedPokemon = [...displayPokemon].sort((a, b) => {
         <option value="speed">Sort: Speed</option>
       </select>
 
+
         {/* Type filter pills */}
         <div className="flex flex-wrap gap-2">
           <button
@@ -162,6 +170,19 @@ const sortedPokemon = [...displayPokemon].sort((a, b) => {
           ))}
         </div>
       </div>
+
+      {token && teams.length > 0 && (
+  <select
+    value={selectedTeamId}
+    onChange={(e) => setSelectedTeamId(e.target.value)}
+    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-800 outline-none focus:border-gray-400 focus:bg-white transition-colors duration-150"
+  >
+    <option value="">Select a team…</option>
+    {teams.map((team) => (
+      <option key={team.id} value={team.id}>{team.name}</option>
+    ))}
+  </select>
+)}
 
     {/* Shiny toggle */}
     <button
@@ -193,9 +214,22 @@ const sortedPokemon = [...displayPokemon].sort((a, b) => {
 
       {/* Pokemon Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-        {sortedPokemon.map((pokemon) => (
-          <PokemonCard key={pokemon.id} pokemon={pokemon} isShiny={isShiny} />
-        ))}
+      {sortedPokemon.map((pokemon) => (
+        <PokemonCard 
+          key={pokemon.id} 
+          pokemon={pokemon} 
+          isShiny={isShiny}
+          selectedTeamId={selectedTeamId}
+          onAddToTeam={async (pokemonId) => {
+            if (!selectedTeamId) return
+            try {
+              await addPokemonToTeam(selectedTeamId, pokemonId, token)
+            } catch (err) {
+              console.log("Error adding pokemon:", err)
+            }
+          }}
+        />
+      ))}
       </div>
 
       {/* Pagination (only when no filters/search are active) */}
