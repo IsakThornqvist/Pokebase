@@ -60,10 +60,18 @@ const POKEMON_QUERY = `
 const SEARCH_QUERY = `
     query ($name: String!) {
       searchPokemon(name: $name) {
-    id
-    name
-    type1
-    hp
+      id
+      name
+      type1
+      type2
+      hp
+      attack
+      defense
+      spAttack
+      spDefense
+      speed
+      weight
+      height
   }
 
     }
