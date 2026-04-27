@@ -13,10 +13,14 @@ import { typeColors } from "../types/types"
  *
  * @property pokemon - The Pokémon data to display
  * @property isShiny - Whether to show shiny sprite (optional)
+ * @property selectedTeamId - Currently selected team ID
+ * @property onAddToTeam - Callback to add pokemon to team
  */
 interface PokemonCardProps {
   pokemon: Pokemon
   isShiny?: boolean
+  selectedTeamId?: string
+  onAddToTeam?: (pokemonId: string) => Promise<void>
 }
 
 /**
@@ -35,20 +39,32 @@ const statColors: Record<string, string> = {
 /**
  * Renders a card UI for a single Pokémon.
  */
-const PokemonCard = ({ pokemon, isShiny = false }: PokemonCardProps) => {
+const PokemonCard = ({ pokemon, isShiny = false, selectedTeamId, onAddToTeam }: PokemonCardProps) => {
 
-const getTypeColor = (type: string) => typeColors[type] ?? "bg-gray-100 text-gray-500"
+  const getTypeColor = (type: string) => typeColors[type] ?? "bg-gray-100 text-gray-500"
 
   return (
     <div className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer overflow-hidden flex flex-col">
 
       {/* Image area */}
-      <div className="flex justify-center items-center bg-gradient-to-b from-gray-50 to-gray-100 pt-5 pb-2 px-4">
+      <div className="relative flex justify-center items-center bg-gradient-to-b from-gray-50 to-gray-100 pt-5 pb-2 px-4">
         <img
           src={`https://img.pokemondb.net/sprites/home/${isShiny ? 'shiny' : 'normal'}/${pokemon.name.toLowerCase()}.png`}
           alt={pokemon.name}
           className="w-24 h-24 object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-200"
         />
+        {/* Add to team button */}
+        {selectedTeamId && onAddToTeam && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onAddToTeam(pokemon.id)
+            }}
+            className="absolute top-2 right-2 w-6 h-6 bg-gray-900 text-white rounded-full text-xs font-bold hover:bg-gray-700 transition-colors flex items-center justify-center"
+          >
+            +
+          </button>
+        )}
       </div>
 
       {/* Info + stats */}
@@ -85,9 +101,6 @@ const getTypeColor = (type: string) => typeColors[type] ?? "bg-gray-100 text-gra
             { label: "SPDEF", value: pokemon.spDefense },
             { label: "SPD", value: pokemon.speed },
             { label: "TOTAL", value: (pokemon.hp ?? 0) + (pokemon.attack ?? 0) + (pokemon.defense ?? 0) + (pokemon.spAttack ?? 0) + (pokemon.spDefense ?? 0) + (pokemon.speed ?? 0) }
-
-
-            
           ].map(({ label, value }) => (
             <div key={label} className="flex items-center gap-2">
               <span className="text-xs font-medium text-gray-400 w-7 shrink-0">{label}</span>
