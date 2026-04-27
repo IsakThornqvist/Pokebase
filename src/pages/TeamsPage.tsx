@@ -1,13 +1,14 @@
-import { useMyTeams, createTeam, deleteTeam } from "../hooks/useTeams"
+import { useMyTeams, createTeam, deleteTeam, updateTeam, removePokemonFromTeam } from "../hooks/useTeams"
 import { useAuth } from "../context/AuthContext"
 import { useState } from "react"
-
 
 const TeamsPage = () => {
   const { token } = useAuth()
   const { teams, loading, error } = useMyTeams(token)
   const [newTeamName, setNewTeamName] = useState("")
   const [creating, setCreating] = useState(false)
+  const [editingTeamId, setEditingTeamId] = useState<string | null>(null)
+  const [editingName, setEditingName] = useState("")
 
   async function handleCreateTeam() {
     if (!newTeamName.trim()) return
@@ -20,6 +21,26 @@ const TeamsPage = () => {
       console.log("Error creating team:", err)
     } finally {
       setCreating(false)
+    }
+  }
+
+  async function handleUpdateTeam(teamId: string) {
+    if (!editingName.trim()) return
+    try {
+      await updateTeam(teamId, editingName, token)
+      setEditingTeamId(null)
+      window.location.reload()
+    } catch (err) {
+      console.log("Error updating team:", err)
+    }
+  }
+
+  async function handleRemovePokemon(teamId: string, pokemonId: string) {
+    try {
+      await removePokemonFromTeam(teamId, pokemonId, token)
+      window.location.reload()
+    } catch (err) {
+      console.log("Error removing pokemon:", err)
     }
   }
 
@@ -73,36 +94,91 @@ const TeamsPage = () => {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-{teams.map((team) => (
-  <div key={team.id} className="bg-white border border-gray-200 rounded-lg p-4 flex flex-col gap-3">
-    <div className="flex items-center justify-between">
-      <h2 className="text-sm font-semibold text-gray-900">{team.name}</h2>
-      <button
-        onClick={async () => {
-          try {
-            await deleteTeam(team.id, token)
-            window.location.reload()
-          } catch (err) {
-            console.log("Error deleting team:", err)
-          }
-        }}
-        className="text-xs font-medium text-red-500 hover:text-red-700 transition-colors"
-      >
-        Delete
-      </button>
-    </div>
-    <div className="flex flex-wrap gap-1">
-      {team.members.map((member) => (
-        <img
-          key={member.id}
-          src={`https://img.pokemondb.net/sprites/home/normal/${member.pokemon.name.toLowerCase()}.png`}
-          alt={member.pokemon.name}
-          className="w-10 h-10 object-contain"
-        />
-      ))}
-    </div>
-  </div>
-))}
+        {teams.map((team) => (
+          <div key={team.id} className="bg-white border border-gray-200 rounded-lg p-4 flex flex-col gap-3">
+            
+            {/* Team header */}
+            <div className="flex items-center justify-between">
+              {editingTeamId === team.id ? (
+                <div className="flex gap-2 flex-1">
+                  <input
+                    type="text"
+                    value={editingName}
+                    onChange={(e) => setEditingName(e.target.value)}
+                    className="flex-1 px-2 py-1 rounded-md border border-gray-300 text-sm outline-none focus:border-gray-500"
+                    autoFocus
+                  />
+                  <button
+                    onClick={() => handleUpdateTeam(team.id)}
+                    className="text-xs font-medium text-green-600 hover:text-green-800 transition-colors"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={() => setEditingTeamId(null)}
+                    className="text-xs font-medium text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <h2 className="text-sm font-semibold text-gray-900">{team.name}</h2>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => {
+                        setEditingTeamId(team.id)
+                        setEditingName(team.name)
+                      }}
+                      className="text-xs font-medium text-gray-500 hover:text-gray-700 transition-colors"
+                    >
+                      Rename
+                    </button>
+                    <button
+                      onClick={async () => {
+                        try {
+                          await deleteTeam(team.id, token)
+                          window.location.reload()
+                        } catch (err) {
+                          console.log("Error deleting team:", err)
+                        }
+                      }}
+                      className="text-xs font-medium text-red-500 hover:text-red-700 transition-colors"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Pokemon sprites with remove button */}
+            <div className="flex flex-wrap gap-2">
+              {team.members.map((member) => (
+                <div key={member.id} className="relative group/pokemon">
+                  <img
+                    src={`https://img.pokemondb.net/sprites/home/normal/${member.pokemon.name.toLowerCase()}.png`}
+                    alt={member.pokemon.name}
+                    className="w-10 h-10 object-contain"
+                  />
+                  <button
+                    onClick={() => handleRemovePokemon(team.id, member.pokemon.id)}
+                    className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-xs hidden group-hover/pokemon:flex items-center justify-center leading-none"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+              {team.members.length === 0 && (
+                <p className="text-xs text-gray-400">No Pokémon yet</p>
+              )}
+            </div>
+
+            {/* Member count */}
+            <p className="text-xs text-gray-400">{team.members.length}/6 Pokémon</p>
+
+          </div>
+        ))}
       </div>
     </div>
   )
