@@ -60,6 +60,23 @@ const ADD_POKEMON_MUTATION = `
   }
 `
 
+const DELETE_TEAM_MUTATION = `
+  mutation($teamId: ID!) {
+    deleteTeam(teamId: $teamId) {
+      id
+    }
+  }
+`
+
+
+export async function deleteTeam(teamId: string, token: string | null) {
+    return await graphqlRequest<{ deleteTeam: { id: string } }>(
+        DELETE_TEAM_MUTATION,
+        { teamId },
+        token
+    )
+}
+
 export async function addPokemonToTeam(teamId: string, pokemonId: string, token: string | null) {
     return await graphqlRequest<{ addPokemonToTeam: Team }>(
         ADD_POKEMON_MUTATION,

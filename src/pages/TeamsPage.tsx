@@ -1,6 +1,7 @@
-import { useMyTeams, createTeam } from "../hooks/useTeams"
+import { useMyTeams, createTeam, deleteTeam } from "../hooks/useTeams"
 import { useAuth } from "../context/AuthContext"
 import { useState } from "react"
+
 
 const TeamsPage = () => {
   const { token } = useAuth()
@@ -72,21 +73,36 @@ const TeamsPage = () => {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {teams.map((team) => (
-          <div key={team.id} className="bg-white border border-gray-200 rounded-lg p-4 flex flex-col gap-3">
-            <h2 className="text-sm font-semibold text-gray-900">{team.name}</h2>
-            <div className="flex flex-wrap gap-1">
-              {team.members.map((member) => (
-                <img
-                  key={member.id}
-                  src={`https://img.pokemondb.net/sprites/home/normal/${member.pokemon.name.toLowerCase()}.png`}
-                  alt={member.pokemon.name}
-                  className="w-10 h-10 object-contain"
-                />
-              ))}
-            </div>
-          </div>
-        ))}
+{teams.map((team) => (
+  <div key={team.id} className="bg-white border border-gray-200 rounded-lg p-4 flex flex-col gap-3">
+    <div className="flex items-center justify-between">
+      <h2 className="text-sm font-semibold text-gray-900">{team.name}</h2>
+      <button
+        onClick={async () => {
+          try {
+            await deleteTeam(team.id, token)
+            window.location.reload()
+          } catch (err) {
+            console.log("Error deleting team:", err)
+          }
+        }}
+        className="text-xs font-medium text-red-500 hover:text-red-700 transition-colors"
+      >
+        Delete
+      </button>
+    </div>
+    <div className="flex flex-wrap gap-1">
+      {team.members.map((member) => (
+        <img
+          key={member.id}
+          src={`https://img.pokemondb.net/sprites/home/normal/${member.pokemon.name.toLowerCase()}.png`}
+          alt={member.pokemon.name}
+          className="w-10 h-10 object-contain"
+        />
+      ))}
+    </div>
+  </div>
+))}
       </div>
     </div>
   )
