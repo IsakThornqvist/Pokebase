@@ -23,3 +23,21 @@ export interface Pokemon {
   gender: string | null 
 
 }
+
+export interface User {
+  id: string
+  email: string
+}
+
+export interface TeamMember {
+  id: string
+  pokemon: Pokemon
+}
+
+export interface Team {
+  id: string
+  name: string
+  user: User
+  members: TeamMember[]
+  createdAt: string
+}
