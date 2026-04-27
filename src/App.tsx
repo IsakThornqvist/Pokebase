@@ -17,7 +17,7 @@ import RegisterPage from "./pages/RegisterPage"
 import StatisticsPage from "./pages/StatisticsPages"
 import HomePage from "./pages/HomePage"
 
-/* import ProtectedRoute from "./components/ProtectedRoute" */
+ import ProtectedRoute from "./components/ProtectedRoute"
 import { AuthProvider } from "./context/AuthContext"
 import OAuthCallback from "./pages/OAuthCallback"
 import TeamsPage from "./pages/TeamsPage"
@@ -38,8 +38,16 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/statistics" element={<StatisticsPage />} />
-            <Route path="/teams" element={<TeamsPage />} />
+            <Route path="/statistics" element={
+            <ProtectedRoute>
+              <StatisticsPage />
+            </ProtectedRoute>
+            }  />
+            <Route path="/teams" element={
+            <ProtectedRoute>
+              <TeamsPage />
+            </ProtectedRoute>
+            } />
             <Route path="/" element={<HomePage />} />
             <Route path="/oauth/callback" element={<OAuthCallback />} />
 
