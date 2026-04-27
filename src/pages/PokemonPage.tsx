@@ -18,7 +18,7 @@
 import { usePokemon, useSearchPokemon, useTypeSearchPokemon, useAllPokemon } from "../hooks/usePokemon"
 import PokemonCard from "../components/PokemonCard"
 import { useState } from "react"
-import { types, typeColors } from "../types/types"
+import { types, typeColors, EXCLUDED_POKEMON } from "../types/types"
 import { useDelay } from "../hooks/useDelay"
 import { useMyTeams, addPokemonToTeam } from "../hooks/useTeams"
 import { useAuth } from "../context/AuthContext"
@@ -76,6 +76,11 @@ const sortedPokemon = [...displayPokemon].sort((a, b) => {
     default: return parseInt(a.id) - parseInt(b.id)
   }
 })
+
+
+const filteredPokemon = sortedPokemon.filter(
+  p => !EXCLUDED_POKEMON.includes(p.name.toLowerCase())
+)
 
   /**
    * Determines loading state based on active mode.
@@ -200,12 +205,12 @@ const sortedPokemon = [...displayPokemon].sort((a, b) => {
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold text-gray-700">{pageTitle}</h2>
         <span className="text-xs font-medium text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">
-          {sortedPokemon.length} found
+          {filteredPokemon.length} found
         </span>
       </div>
 
       {/* Empty state */}
-      {sortedPokemon.length === 0 && !isLoading && (
+      {filteredPokemon.length === 0 && !isLoading && (
         <div className="flex flex-col items-center justify-center h-48 bg-white rounded-2xl border border-dashed border-gray-200">
           <p className="text-gray-400 text-sm font-medium">No Pokémon found</p>
           <p className="text-gray-300 text-xs mt-1">Try a different name or type filter</p>
@@ -214,7 +219,7 @@ const sortedPokemon = [...displayPokemon].sort((a, b) => {
 
       {/* Pokemon Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-      {sortedPokemon.map((pokemon) => (
+      {filteredPokemon.map((pokemon) => (
         <PokemonCard 
           key={pokemon.id} 
           pokemon={pokemon} 
