@@ -3,37 +3,89 @@
 
 # PokeBase
 
-> A data visualization dashboard for Pokémon, built for anyone who wants to explore the numbers behind their favourite Pokémon.
+> An interactive Pokémon data dashboard — explore, compare, and visualize stats across the entire Pokédex.
+
 
 ## Deployed Application
 
-> URL: *placeholcer*
+> URL: https://pokebase-production-8b7e.up.railway.app/
 
 ---
 
 ## Overview
 
-PokeBase is an interactive web application that visualizes Pokémon data fetched from a custom-built GraphQL API. The app allows users to browse, search, and filter all Pokémon, compare stats, and explore statistical insights through interactive charts — all behind a secure OAuth 2.0 authentication flow.
+PokeBase is a data visualization web application built with React and TypeScript, powered by a custom build api found at: https://github.com/IsakThornqvist/1dv027-Assignment-API-design. Authenticated users can browse the entire Pokédex, build teams, and explore statistical insights through interactive charts.
 
-The dataset covers all mainline Pokémon with attributes including base stats (HP, Attack, Defense, Sp. Attack, Sp. Defense, Speed), types, height, and weight. The application provides insights such as type distributions, stat comparisons, and height/weight correlations across the entire Pokédex.
+The dataset covers all mainline Pokémon and includes:
+- **Base stats** — HP, Attack, Defense, Sp. Attack, Sp. Defense, Speed
+- **Physical attributes** — height and weight
+- **Typing** — primary and secondary types
+
+The statistics dashboard provides insights such as type distributions, per-type stat averages, and height/weight correlations — aggregated across the full Pokédex.
 
 ## How to Use
 
-*Explain how to interact with your visualization (controls, filters, etc.). Screenshots/gifs are encouraged.*
+### Pokédex Browser
+The Pokémon page is the core of the application. It allows authenticated users to browse the entire Pokédex with the following controls:
+
+- **Search** — type in the search bar to find a Pokémon by name
+- **Type filter** — click any type pill to filter Pokémon by that type
+- **Stat sorting** — use the sort dropdown to rank all Pokémon by a specific stat or total base stats
+- **Shiny toggle** — switch between normal and shiny sprites
+
+### Building a Team
+1. Select a team from the **Select a team** dropdown (requires at least one created team)
+2. A **+** button appears on each Pokémon card
+3. Click **+** to add that Pokémon to the selected team
+4. Teams are capped at **6 Pokémon** maximum
+
+### Teams Page
+Manage your teams from the Teams page:
+- **Create** a new team by typing a name and clicking Create team
+- **Rename** a team by clicking Rename
+- **Remove** a Pokémon from a team by hovering over its slot and clicking the red × button
+- **Delete** an entire team by clicking Delete
+
+### Statistics Page
+Explore data insights through three interactive charts:
+- **Pokémon count per type** — hover over a bar to see the exact count
+- **Average stats per type** — click a stat button to switch which stat is displayed
+- **Height vs Weight scatter plot** — click type pills to add or remove types from the chart, hover over a dot to see the Pokémon's name, height and weight
 
 
 ![Stat Page](public/images/pokemon/StatPage.png)
-Overview of the Statistics Page
+- Overview of the Statistics Page
+
+![Login Page](public/images/pokemon/LoginPage.png)
+- Overview of login page
+
+![Pokemon Page](public/images/pokemon/PokemonPage.png)
+- The Pokédex browser showing Pokémon sorted by total base stats. 
+- The type filter pills and sort dropdown are visible in the toolbar. 
+- A team is not currently selected on this picture
+
+![Teams Page](public/images/pokemon/TeamsPage.png)
+- The Teams Page shows all the teams of the logged in user
+- Allows creation of new teams
+- Ability to delete entire teams
+- Ability to remove a pokemon from a team
+- Ability to rename a team
+
 
 ![Bar Chart 1](public/images/pokemon/BarChart1.png)
-This Bar Chart shows all pokemon and their types and sorts them in order of how many pokemon belongs to each type. A hover effect exists that shiws the number of pokemon belonging to that type.
+- Pokémon count per type sorted in descending order
+- Water type has the most Pokémon, Flying the fewest
+- Hover over a bar to see the exact count for that type
 
 ![Bar Chart 2](public/images/pokemon/BarChart2.png)
-This Bar Chart shows the average stats for each type and allows the user to change what type to display via the buttons. Hover over a certain bar to see the average for that type.
+- Average base stats per type, currently showing Attack
+- Click any stat button above the chart to switch between HP, Attack, Defense, Sp. Attack, Sp. Defense and Speed
+- Hover over a bar to see the exact average for that type
 
 ![Scatter Chart](public/images/pokemon/ScatterChart.png)
-The Scatter Chart shows the height and weight of each pokemon and allows the user to choose hich types they want to display and compare at the same time.
-
+- Height (m) on the X-axis, Weight (kg) on the Y-axis
+- Multiple types can be selected and compared simultaneously by clicking the type pills
+- Hover over any dot to see the Pokémon's name, height and weight
 
 
 ---
@@ -80,6 +132,8 @@ The application consists of three parts:
 └─────────────────┘     └─────────────────┘     └─────────────────┘
 ```
 
+> Note: Ports above reflect local development. In production, all services are deployed on Railway.
+
 The Express server handles the OAuth 2.0 authorization code exchange server-side, ensuring the GitHub client secret is never exposed to the browser. After authentication, the user's identity is mapped to the GraphQL API via register/login mutations, and a JWT is returned to the React app for all subsequent requests.
 
 ---
@@ -107,7 +161,7 @@ The Express server handles the OAuth 2.0 authorization code exchange server-side
 
 **1. Clone the repository**
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/IsakThornqvist/Pokebase.git
 cd assignment-wt
 ```
 
@@ -200,54 +254,41 @@ assignment-wt/
 
 ## Acknowledgements
 
-*Resources, attributions, or shoutouts.*
-
+- [PokemonDB](https://pokemondb.net/) — Pokémon sprites used for card and team slot images
+- [PokeBase API](https://github.com/IsakThornqvist/1dv027-Assignment-API-design) — custom-built GraphQL API powering all Pokémon and team data
+- [Recharts](https://recharts.org/) — charting library used for all data visualizations
+- [Tailwind CSS](https://tailwindcss.com/) — utility-first CSS framework used for all styling
+- [Apollo Server](https://www.apollographql.com/docs/apollo-server/) — GraphQL server used in the API
+- [Prisma](https://www.prisma.io/) — ORM used for database access in the API
+- [GitHub OAuth](https://docs.github.com/en/apps/oauth-apps) — third-party OAuth 2.0 provider used for authentication
+- [Railway](https://railway.app/) — platform used to host the GraphQL API and PostgreSQL database
 
 
 ## Requirements
 
-See [all requirements in Issues](../../issues/). Close issues as you implement them. Create additional issues for any custom functionality.
 
 ### Functional Requirements
 
 | Requirement | Issue | Status |
 |---|---|---|
-| API Integration — the app consumes your WT1 API | [#14](../../issues/14) | :white_large_square: |
-| OAuth Authentication — users log in via OAuth 2.0 | [#15](../../issues/15) | :white_large_square: |
-| Interactive data visualization with aggregation/adaptation for 10 000+ data points | [#11](../../issues/11) | :white_large_square: |
-| Efficient loading — pagination, lazy loading, loading indicators | [#13](../../issues/13) | :white_large_square: |
+| API Integration — the app consumes your WT1 API | [#14](../../issues/14) | :white_check_mark: |
+| OAuth Authentication — users log in via OAuth 2.0 | [#15](../../issues/15) | :white_check_mark: |
+| Interactive data visualization with aggregation/adaptation for 10 000+ data points | [#11](../../issues/11) | :white_check_mark: |
+| Efficient loading — pagination, lazy loading, loading indicators | [#13](../../issues/13) | :white_check_mark: |
 
 ### Non-Functional Requirements
 
 | Requirement | Issue | Status |
 |---|---|---|
-| Clear and well-structured code | [#1](../../issues/1) | :white_large_square: |
-| Code reuse | [#2](../../issues/2) | :white_large_square: |
-| Dependency management and scripts | [#3](../../issues/3) | :white_large_square: |
-| Source code documentation | [#4](../../issues/4) | :white_large_square: |
-| Coding standard | [#5](../../issues/5) | :white_large_square: |
-| Examiner can follow the creation process | [#6](../../issues/6) | :white_large_square: |
-| Publicly accessible over the internet | [#7](../../issues/7) | :white_large_square: |
-| Keys and tokens handled correctly | [#8](../../issues/8) | :white_large_square: |
-| Complete assignment report with correct links | [#9](../../issues/9) | :white_large_square: |
-
-### VG — AI/ML Feature (optional)
-
-For a VG grade, integrate **one** AI/ML feature into the application. Pick one below or propose your own of similar scope. See the [VG issue](../../issues/12) for full details and acceptance criteria.
-
-| Option | Status |
-|---|---|
-| Semantic Search — natural language queries matched by meaning | :white_large_square: |
-| Content-Based Recommendations — "items similar to this one" | :white_large_square: |
-| Sentiment Analysis — analyze and visualize text sentiment | :white_large_square: |
-| Text Summarization / Generation — LLM-powered summaries | :white_large_square: |
-| Clustering & Grouping — auto-group similar items visually | :white_large_square: |
-| RAG — natural language Q&A grounded in your dataset | :white_large_square: |
-| Other: *describe* | :white_large_square: |
-
-*Describe your chosen AI/ML feature and how it integrates with your application:*
-
-
+| Clear and well-structured code | [#1](../../issues/1) | :white_check_mark: |
+| Code reuse | [#2](../../issues/2) | :white_check_mark: |
+| Dependency management and scripts | [#3](../../issues/3) | :white_check_mark: |
+| Source code documentation | [#4](../../issues/4) | :white_check_mark: |
+| Coding standard | [#5](../../issues/5) | :white_check_mark: |
+| Examiner can follow the creation process | [#6](../../issues/6) | :white_check_mark: |
+| Publicly accessible over the internet | [#7](../../issues/7) | :white_check_mark: |
+| Keys and tokens handled correctly | [#8](../../issues/8) | :white_check_mark: |
+| Complete assignment report with correct links | [#9](../../issues/9) | :white_check_mark: |
 
 
 ## Author
