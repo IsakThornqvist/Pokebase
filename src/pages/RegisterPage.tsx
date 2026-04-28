@@ -40,7 +40,7 @@ const RegisterPage = () => {
             const { token } = await registerMutation(email, password)
             login(token)
             navigate("/pokemon")
-        } catch (err) {
+        } catch {
             setError("Invalid email or password")
         }
     }

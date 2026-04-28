@@ -36,7 +36,7 @@ const LoginPage = () => {
             const { token } = await loginMutation(email, password)
             login(token)
             navigate("/pokemon")
-        } catch (err) {
+        } catch {
             setError("Invalid email or password")
         }
     }

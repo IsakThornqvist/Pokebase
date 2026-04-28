@@ -64,7 +64,7 @@ export function useAllPokemonStats () {
                     offset: 0
                 })
                 setPokemon(data.allPokemon)
-            } catch (error) {
+            } catch {
                 setError("error placeholder")
             } finally {
                 setLoading(false)

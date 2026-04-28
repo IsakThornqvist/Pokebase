@@ -102,7 +102,7 @@ export function usePokemon(page: number) {
                     offset: (page - 1) * LIMIT 
                 })
                 setPokemon(data.allPokemon)
-            } catch (error) {
+            } catch {
                 setError("Error while getting pokemon data")
             } finally {
                 setLoading(false)
@@ -126,7 +126,7 @@ export function useAllPokemon() {
                     offset: 0
                 })
                 setPokemon(data.allPokemon)
-            } catch (error) {
+            } catch {
                 setError("Error while getting all pokemon")
             } finally {
                 setLoading(false)
@@ -165,7 +165,7 @@ export function useSearchPokemon(name: string) {
                     name
                 })
                 setPokemon(data.searchPokemon)
-            } catch(error) {
+            } catch {
                 setError("Error while getting pokemon data via search")
             } finally {
                 setLoading(false)
@@ -201,7 +201,7 @@ export function useTypeSearchPokemon(type1: string) {
                 )
 
                 setPokemon(filtered)
-            } catch (error) {
+            } catch {
                 setError("Error while getting pokemon via type search")
             } finally {
                 setLoading(false)
