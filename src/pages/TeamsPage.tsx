@@ -1,15 +1,37 @@
+/**
+ * TeamsPage component.
+ *
+ * Displays and manages the authenticated user's Pokémon teams.
+ * Supports creating, renaming, and deleting teams, as well
+ * as removing individual Pokémon from a team.
+ *
+ * @author Isak Thörnqvist
+ * @version 1.0.0
+ */
+
 import { useMyTeams, createTeam, deleteTeam, updateTeam, removePokemonFromTeam } from "../hooks/useTeams"
 import { useAuth } from "../context/AuthContext"
 import { useState } from "react"
 
+/**
+ * Renders the teams dashboard for the authenticated user.
+ */
 const TeamsPage = () => {
   const { token } = useAuth()
   const { teams, loading, error } = useMyTeams(token)
+  /** New team name input state */
   const [newTeamName, setNewTeamName] = useState("")
+  /** Loading state for team creation */
   const [creating, setCreating] = useState(false)
+  /** ID of the team currently being renamed */
   const [editingTeamId, setEditingTeamId] = useState<string | null>(null)
+  /** Name input state for the team being renamed */
   const [editingName, setEditingName] = useState("")
 
+    /**
+   * Creates a new team with the current input value.
+   * Reloads the page on success to reflect the new team.
+   */
   async function handleCreateTeam() {
     if (!newTeamName.trim()) return
     try {
@@ -24,6 +46,12 @@ const TeamsPage = () => {
     }
   }
 
+    /**
+   * Updates the name of a team.
+   * Reloads the page on success.
+   *
+   * @param {string} teamId - ID of the team to update.
+   */
   async function handleUpdateTeam(teamId: string) {
     if (!editingName.trim()) return
     try {
@@ -35,6 +63,13 @@ const TeamsPage = () => {
     }
   }
 
+    /**
+   * Removes a Pokémon from a team.
+   * Reloads the page on success.
+   *
+   * @param {string} teamId - ID of the team.
+   * @param {string} pokemonId - ID of the Pokémon to remove.
+   */
   async function handleRemovePokemon(teamId: string, pokemonId: string) {
     try {
       await removePokemonFromTeam(teamId, pokemonId, token)

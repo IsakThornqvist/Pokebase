@@ -33,7 +33,11 @@ function App() {
         <Navbar />
         <div className="px-6 py-8">
           <Routes>
-            <Route path="/pokemon" element={<Pokemon />} />
+            <Route path="/pokemon" element={
+            <ProtectedRoute>
+              <Pokemon />
+            </ProtectedRoute>
+            } />
             
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />

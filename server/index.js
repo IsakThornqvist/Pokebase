@@ -1,3 +1,15 @@
+/**
+ * OAuth authentication server.
+ *
+ * Handles GitHub OAuth 2.0 flow server-side to keep
+ * the client secret secure. Maps GitHub identity to
+ * an existing API user via login or auto-registration,
+ * then returns a JWT to the frontend.
+ *
+ * @author Isak Thörnqvist
+ * @version 1.0.0
+ */
+
 require("dotenv").config()
 const express = require("express")
 const axios = require("axios")
@@ -6,13 +18,25 @@ const cors = require("cors")
 const app = express()
 app.use(cors({ origin: process.env.FRONTEND_URL }))
 
-// Step 1 - Redirect user to GitHub
+/**
+ * Step 1 — Redirect user to GitHub OAuth consent screen.
+ *
+ * Builds the GitHub authorization URL with the client ID
+ * and required scopes, then redirects the user.
+ */
 app.get("/auth/github", (req, res) => {
   const url = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&scope=user:email`
   res.redirect(url)
 })
 
-// Step 2 - GitHub redirects back here with a code
+/**
+ * Step 2 — Handle GitHub OAuth callback.
+ *
+ * Receives the authorization code from GitHub, exchanges
+ * it for an access token, fetches the user's primary email,
+ * then maps the identity to an API user via login or register.
+ * Redirects to the frontend with the JWT token on success.
+ */
 app.get("/auth/github/callback", async (req, res) => {
   const { code } = req.query
 
@@ -45,6 +69,7 @@ app.get("/auth/github/callback", async (req, res) => {
     let jwt = null
 
 try {
+  // Attempt to log in with the GitHub email and shared OAuth secret
   const loginResponse = await axios.post(process.env.API_URL, {
     query: `
       mutation {
@@ -78,8 +103,7 @@ try {
   jwt = registerResponse.data.data.register.token
 }
 
-console.log("Final JWT:", jwt)
-    // Send JWT back to React app
+    // Redirect to frontend with JWT as query parameter
     res.redirect(`${process.env.FRONTEND_URL}/oauth/callback?token=${jwt}`)
 
   } catch (err) {
